@@ -99,3 +99,15 @@ Comparado el despliegue contra el sitio vivo de Webflow el 2026-09-04:
   y mueve el foco a él, y `employment-application-form` redirige a la home.
 
 Lo único sin verificar es que el correo llegue de verdad, porque depende de `SMTP_PASS`.
+
+## Si los formularios devuelven 502
+
+Significa que Gmail rechaza la credencial (`535 BadCredentials`), no que el sitio falle.
+Antes de tocar Vercel, comprueba la clave en local — tarda dos segundos y no envía nada:
+
+```bash
+npm run check-smtp
+```
+
+La causa más habitual es pegar la app password **con los espacios** con que Google la
+muestra. Son 16 caracteres seguidos. El script te los quita y te dice si Gmail la acepta.
