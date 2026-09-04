@@ -1,0 +1,11 @@
+{
+  "name": "support-staff-solutions",
+  "private": true,
+  "description": "Sitio de Support Staff Solutions, migrado de Webflow a Vercel. Estatico, sin build.",
+  "dependencies": {
+    "nodemailer": "^10.0.0"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}
