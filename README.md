@@ -71,9 +71,31 @@ Ninguna de Webflow. Quedan dos de terceros, que ya estaban y no se caen al cance
 - **Elfsight** (`static.elfsight.com`) — widget de reseñas en home y about. No se puede
   localizar: es un widget de datos en vivo y depende de la cuenta de Elfsight del cliente.
 
+  > Comprobado el 2026-09-04: el widget **no pinta nada, tampoco en el sitio de Webflow**.
+  > El contenedor existe pero queda con 0 hijos y 0 px de alto en ambos. Ya estaba roto
+  > antes de migrar — probablemente la cuenta de Elfsight caducó. No es una regresión de
+  > la migración, pero conviene revisarlo con el cliente.
+
 ## Pendiente
 
 - **Cambio de DNS.** El dominio sigue apuntando a Webflow.
 - **Turnstile.** El anti-spam se monta al conectar el DNS: necesita el dominio dado de alta
   en Cloudflare para emitir las claves. `js/webflow.js` ya trae soporte de fábrica.
 - **Cancelar Webflow**, una vez el DNS esté cambiado y verificado.
+
+## Verificado
+
+Comparado el despliegue contra el sitio vivo de Webflow el 2026-09-04:
+
+- **Texto visible**: 0 diferencias en las 5 páginas.
+- **DOM del `<body>`** (etiquetas y clases): 0 diferencias en las 5 páginas.
+- **Layout**: las 5 páginas × 2 anchos (1280 y 375 px) dan la misma huella de cajas —
+  mismas coordenadas, mismos tamaños, misma altura de documento. 10/10 idénticas.
+- **Rutas**: `/about-us` y compañía sirven 200; `/about-us.html` redirige 308 a la limpia.
+- **Assets**: ninguna imagen rota (0 de 23 en la home), consola sin errores, y las únicas
+  peticiones externas son a jsdelivr y elfsight.
+- **API**: `GET /api/submit` devuelve 405, un formulario desconocido 400.
+- **Formularios**: el shim intercepta sin navegar, `contact-us` muestra el mensaje en línea
+  y mueve el foco a él, y `employment-application-form` redirige a la home.
+
+Lo único sin verificar es que el correo llegue de verdad, porque depende de `SMTP_PASS`.
