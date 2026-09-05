@@ -201,7 +201,7 @@
 @media (min-width: 64rem) { .includes__grid { grid-template-columns: repeat(3, 1fr); } }
 .includes__item { padding-block: var(--s-5); border-block-start: 1px solid rgb(27 25 25 / .24); }
 .includes__term { font-family: var(--ff-display); font-size: var(--fs-h3); letter-spacing: var(--tr-display); }
-.includes__desc { color: rgb(27 25 25 / .76); font-size: var(--fs-sm); margin-block-start: var(--s-1); }
+.includes__desc { color: rgb(27 25 25 / .86);   /* .76 daba 4,44:1 sobre el verde: por debajo de AA */ font-size: var(--fs-sm); margin-block-start: var(--s-1); }
 
 /* Puestos que cubrimos: la seccion que mas debe parecer una pagina del folleto. */
 .positions { background: var(--c-ink); color: var(--c-on-dark); }
