@@ -258,3 +258,12 @@ a.contact-tile:hover { background: var(--c-ink-2); transform: translateY(-2px); 
 .quotes__lead { margin-block-start: var(--s-4); }
 .who__body { margin-block-start: var(--s-5); }
 .process__media { margin-block-start: var(--s-7); }
+
+/* --- franja de cifras (sustituye al divisor decorativo de plantilla) ------- */
+.facts__inner { padding-block: calc(var(--section-y) * .6 + var(--diag)); color: var(--c-on-dark); }
+.facts__grid { display: grid; gap: var(--s-6); }
+@media (min-width: 40rem) { .facts__grid { grid-template-columns: repeat(3, 1fr); gap: var(--s-8); } }
+.fact__num { font-family: var(--ff-display); font-size: var(--fs-h1); line-height: 1; color: var(--c-green); letter-spacing: var(--tr-display); }
+.fact__label { margin-block-start: var(--s-2); color: var(--c-on-dark-2); max-width: 22ch; }
+.brands__lead { margin-inline: auto; text-align: center; margin-block-end: var(--s-7); }
+.brands__title + .brands__lead { margin-block-start: calc(var(--s-6) * -1 + var(--s-4)); }
