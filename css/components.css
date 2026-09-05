@@ -371,3 +371,4 @@
 .footer-col__note { margin-block-start: var(--s-5); color: var(--c-on-dark-2); }
 .footer-partner__name { font-weight: 600; color: var(--c-on-dark); }
 .footer-partner__role { color: var(--c-on-dark-2); font-size: var(--fs-sm); }
+.footer-cta__logo { width: min(16rem, 62vw); height: auto; margin: 0 auto var(--s-6); }
