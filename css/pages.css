@@ -84,9 +84,12 @@
    se parte, que es lo que pasaba antes de rehacer la imagen. */
 @media (min-width: 64rem) {
   .who {
+    /* El original de esta imagen solo mide 1672px, no los 2880 que pide el
+       hueco a DPR2. Es lo que hay: a 1x se sirve nitida, de 1,5x en adelante
+       el navegador la escala. Si aparece un original mayor, basta cambiar
+       estas rutas. */
     background-image: image-set(url('../images/warehouse-crew-1300.jpg') 1x,
-                                url('../images/warehouse-crew-2000.jpg') 1.5x,
-                                url('../images/warehouse-crew-2740.jpg') 2x);
+                                url('../images/warehouse-crew-1672.jpg') 1.5x);
     background-size: cover;
     /* 25% y no 50%: a 1920 la seccion solo mide 661px y el recorte vertical se
        come 415px. Centrado dejaba la ventana en 19,3%-80,7% y decapitaba al
@@ -245,8 +248,7 @@
   }
   .who::before {
     background-image: image-set(url('../images/warehouse-crew-band-800.jpg') 1x,
-                                url('../images/warehouse-crew-band-1200.jpg') 1.5x,
-                                url('../images/warehouse-crew-band-1600.jpg') 2x);
+                                url('../images/warehouse-crew-band-972.jpg') 1.5x);
     background-position: 50% 35%;
   }
   .page-hero--cold-room::before {
@@ -325,7 +327,7 @@
   max-width: 32ch;
 }
 
-.mission__inner { padding-block: var(--diag-pad) var(--section-y); color: var(--c-ink); }
+.mission__inner { padding-block: var(--diag-pad) var(--section-y); color: var(--c-on-dark); }
 .mission__grid { display: grid; gap: var(--s-8); }
 @media (min-width: 64rem) { .mission__grid { grid-template-columns: 1fr 1fr; gap: var(--s-10); } }
 .mission__body { max-width: 46ch; }
@@ -334,6 +336,10 @@
 /* Mismas metricas que .value__icon y .includes__icon: las tres rejillas de
    iconos del sitio miden igual. Aqui el <img> SI puede ir de hermano antes del
    encabezado —el contenedor es un <div> normal, no el <div> de un <dl>. */
+/* El bloque es carbon, y los SVG originales llevan fill="#1b1919" incrustado:
+   sobre el plano serian invisibles. Van dos copias -on-dark con ese carbon
+   pasado a blanco. Un filter:invert(1) habria sido mas corto pero convierte el
+   verde del catalejo en magenta; el acento verde se conserva a proposito. */
 .mission__icon { display: block; width: 2.75rem; height: 2.75rem; margin-block-end: var(--s-4); }
 
 /* Banda divisoria de /contact-us. Responde "existis de verdad y estais en
