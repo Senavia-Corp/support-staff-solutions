@@ -90,51 +90,46 @@ a:where(:not([class])) {
    La diagonal. UNA primitiva, UN angulo en todo el sitio.
 
    Reglas, y no son negociables:
-     1. La diagonal nunca va sobre el elemento que contiene texto: solo sobre
-        ::before o sobre .diag-media.
-     2. El contenido vive en `.diag > *` a z-index 1, con --diag-pad de holgura
-        por el lado cortado.
+     1. La diagonal nunca va sobre el elemento que contiene texto. Siempre sobre
+        un .plane hermano, que es decorativo y va aria-hidden.
+     2. El contenido va por encima con position:relative y z-index >= 1, con
+        --diag-pad de holgura por el lado cortado.
      3. Una diagonal por altura de pantalla, como maximo.
      4. clip-path crea bloque contenedor para descendientes position:fixed.
-        Nada fijo puede vivir dentro de un .diag. La cabecera es hermana de las
-        secciones, asi que se cumple por estructura.
+        Nada fijo puede vivir dentro de una seccion con .plane. La cabecera es
+        hermana de todas las secciones, asi que se cumple por estructura.
    ========================================================================== */
-.diag {
-  position: relative;
-  isolation: isolate;
-  overflow: clip;            /* clip, no hidden: no crea contenedor de scroll */
-}
-.diag > * { position: relative; z-index: 1; }
-
-.diag::before {
-  content: "";
+.plane {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: var(--diag-fill, var(--c-ink));
-  clip-path: var(--diag-shape);
+  background: var(--plane-fill, var(--c-ink));
+  clip-path: var(--plane-shape);
+  pointer-events: none;
+}
+.plane--green { --plane-fill: var(--c-green); }
+.plane--deep  { --plane-fill: var(--c-green-deep); }
+.plane--ink   { --plane-fill: var(--c-ink); }
+
+/* Los cuatro cortes horizontales + la banda. Mismo angulo en todos. */
+.plane--bottom-r { --plane-shape: polygon(0 0, 100% 0, 100% calc(100% - var(--diag)), 0 100%); }
+.plane--bottom-l { --plane-shape: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--diag))); }
+.plane--top-r    { --plane-shape: polygon(0 var(--diag), 100% 0, 100% 100%, 0 100%); }
+.plane--top-l    { --plane-shape: polygon(0 0, 100% var(--diag), 100% 100%, 0 100%); }
+.plane--band     { --plane-shape: polygon(0 0, 100% var(--diag), 100% 100%, 0 calc(100% - var(--diag))); }
+
+/* El corte casi vertical del reparto a dos planos. Solo existe en escritorio:
+   por debajo de 64rem los planos se apilan y el corte vuelve a ser horizontal. */
+@media (min-width: 64rem) {
+  .plane--split { --plane-shape: polygon(0 0, calc(var(--split, 55%) + var(--diag) / 2) 0, calc(var(--split, 55%) - var(--diag) / 2) 100%, 0 100%); }
 }
 
-.diag--bottom-r { --diag-shape: polygon(0 0, 100% 0, 100% calc(100% - var(--diag)), 0 100%); }
-.diag--bottom-l { --diag-shape: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--diag))); }
-.diag--top-r    { --diag-shape: polygon(0 var(--diag), 100% 0, 100% 100%, 0 100%); }
-.diag--top-l    { --diag-shape: polygon(0 0, 100% var(--diag), 100% 100%, 0 100%); }
-.diag--band     { --diag-shape: polygon(0 0, 100% var(--diag), 100% 100%, 0 calc(100% - var(--diag))); }
-
-/* Zona de exclusion del texto, por el lado que va cortado. */
-.diag--bottom-r > *, .diag--bottom-l > * { padding-block-end: var(--diag-pad); }
-.diag--top-r    > *, .diag--top-l    > * { padding-block-start: var(--diag-pad); }
-.diag--band     > *                      { padding-block: var(--diag-pad); }
-
-/* Cuando la diagonal corta una FOTO en vez de un color plano. */
-.diag--photo::before { display: none; }
-.diag-media {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  clip-path: var(--diag-shape);
-}
-.diag-media img { width: 100%; height: 100%; object-fit: cover; }
+/* Seccion que apila plano + foto + contenido. */
+.layered { position: relative; isolation: isolate; overflow: clip; }
+.layered > .layer-content { position: relative; z-index: 2; }
+.layer-media { position: absolute; inset: 0; z-index: 0; }
+.layer-media img { width: 100%; height: 100%; object-fit: cover; }
+.layered > .plane { z-index: 1; }
 
 /* ============================================================================
    Tratamiento fotografico. Va en CSS, no horneado en los JPEG: se ajusta en una
