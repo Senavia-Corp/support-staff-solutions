@@ -64,10 +64,18 @@ test('los unicos terceros que sirven assets son los esperados', () => {
   // Solo lo que el navegador descarga: src= de script/img y href= de <link>. Los <a> a
   // sitios de terceros son enlaces de navegacion y no cuentan.
   const hosts = new Set()
+  // De los <link>, solo cuentan los rel que provocan una descarga. Un
+  // rel="canonical" apunta al dominio final del sitio y no pide ningun byte;
+  // contarlo daba un falso positivo en cuanto se anadio la canonica.
+  const REL_QUE_DESCARGA = /\brel="(stylesheet|preload|prefetch|icon|shortcut icon|apple-touch-icon|manifest)"/i
   for (const file of html) {
     const s = fs.readFileSync(path.join(ROOT, file), 'utf8')
     for (const m of s.matchAll(/src="https?:\/\/([^\s"'/]+)/g)) hosts.add(m[1])
-    for (const m of s.matchAll(/<link\b[^>]*href="https?:\/\/([^\s"'/]+)/g)) hosts.add(m[1])
+    for (const m of s.matchAll(/<link\b[^>]*>/g)) {
+      if (!REL_QUE_DESCARGA.test(m[0])) continue
+      const h = m[0].match(/href="https?:\/\/([^\s"'/]+)/)
+      if (h) hosts.add(h[1])
+    }
   }
   assert.deepStrictEqual([...hosts].sort(), EXTERNOS_OK.slice().sort())
 })
