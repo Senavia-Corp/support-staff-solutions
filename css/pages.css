@@ -78,28 +78,39 @@
 
 /* --- quienes somos (la diagonal insignia) ---------------------------------- */
 .who { color: var(--c-on-dark); }
-/* La foto va de fondo, en la mitad derecha, bajo el plano partido al 58%. Esta
-   composicion EXIGE una imagen construida para ella: el sujeto tiene que vivir
-   en la banda visible, que esta medida abajo. Una foto con el sujeto centrado
-   se parte, que es lo que pasaba antes de rehacer la imagen. */
+/* El corte pasa del 58% al 47%. Al 58% la cuna visible medida 39% de la seccion
+   y el grupo 45,5% del ancho de la foto: no cabia, y la primera persona vivia
+   detras de la diagonal pasara lo que pasara con el JPEG. Al 47% la cuna da de
+   si lo suficiente. El limite por la izquierda lo marco el cliente y esta a la
+   altura del 41-52%, asi que 47% cae dentro con holgura por los dos lados.
+
+   El corte vive en .who y no en .plane para que la foto pueda leerlo: los dos
+   tienen que apoyarse en el MISMO numero o vuelve a aparecer la rendija. */
+.who { --split: 47%; }
+
+/* La foto NO va de fondo de la seccion, va acotada a la cuna que el plano deja
+   libre. Con el fondo a toda anchura la geometria no tiene solucion: el grupo
+   ocupa el 45,5% del ancho de la imagen y a 1920 la ventana vertical de `cover`
+   solo deja el 61,7% del alto cuando el grupo mide 63,9%. Da igual el recorte
+   del JPEG —se cancela en la cuenta—, siempre se corta a alguien. Por eso la
+   primera persona quedaba detras de la diagonal y los pies se iban.
+
+   Acotada a la cuna, la caja siempre es mas estrecha que la foto (1,07 frente a
+   1,79 a 1440), asi que `cover` escala por ALTO: el grupo entra entero de cabeza
+   a pies a cualquier ancho, y el recorte se lo come el pasillo por los lados.
+   El borde izquierdo va al corte INFERIOR del plano, que es el punto mas a la
+   izquierda que alcanza la diagonal: asi no queda rendija por debajo. */
+.who__media { display: none; }
 @media (min-width: 64rem) {
-  .who {
-    /* El original mide ahora 2752px (stock/originales/warehouse-crew-expandido-
-       2752.png), asi que el 2x ya se sirve casi nativo: al hueco a DPR2 le
-       faltan 2880-2200 px de nada y el navegador apenas escala. */
-    background-image: image-set(url('../images/warehouse-crew-1300.jpg') 1x,
-                                url('../images/warehouse-crew-1672.jpg') 1.5x,
-                                url('../images/warehouse-crew-2200.jpg') 2x);
-    background-size: cover;
-    /* 25% y no 50%: a 1920 la seccion solo mide 661px y el recorte vertical se
-       come 415px. Centrado dejaba la ventana en 19,3%-80,7% y decapitaba al
-       grupo, que empieza al 13,9%. Al 25% la ventana baja a 9,7%-71,1%: las
-       cabezas entran siempre y el corte cae a la altura del muslo. */
-    background-position: 62% 25%;
-    background-repeat: no-repeat;
-  }
+  .who__media { display: block; inset: 0 0 0 calc(var(--split) - var(--diag) / 2); }
+  /* 90% y no `center`: el grupo vive entre el 48,5% y el 94% del ancho de la
+     foto y la ventana hay que llevarla ahi. El ancho critico es 1024, donde la
+     seccion es mas baja y la ventana se queda en el 47,2% —solo 1,7 puntos mas
+     que el grupo—; al 90% ese margen queda repartido (1,0 a la izquierda, 0,7 a
+     la derecha). Subirlo a 92% metia el borde de la ventana en el 48,6% y
+     rozaba a la primera persona. */
+  .who__media img { object-position: 90% center; }
 }
-.who .plane { --split: 58%; }
 .who__inner { padding-block: var(--section-y) var(--diag-pad); }
 .who__body { max-width: 50ch; color: var(--c-on-dark-2); }
 .who__body p + p { margin-block-start: var(--s-4); }
