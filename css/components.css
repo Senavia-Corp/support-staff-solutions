@@ -95,7 +95,6 @@ html:not(.js) .site-nav[hidden] { display: block; }
   html.js .nav-toggle__bars::before,
   html.js .nav-toggle__bars::after {
     display: block; width: 22px; height: 2px; background: currentColor;
-    transition: transform var(--dur-2) var(--ease-out), opacity var(--dur-1) linear;
   }
   html.js .nav-toggle__bars { position: relative; }
   html.js .nav-toggle__bars::before,
@@ -150,8 +149,7 @@ html:not(.js) .site-nav[hidden] { display: block; }
   font-size: var(--fs-sm);
   text-decoration: none;
   transition: background-color var(--dur-1) var(--ease-out),
-              color var(--dur-1) var(--ease-out),
-              transform var(--dur-1) var(--ease-out);
+              color var(--dur-1) var(--ease-out);
 }
 .btn:active { transform: translateY(1px); }
 
@@ -171,6 +169,12 @@ html:not(.js) .site-nav[hidden] { display: block; }
 
 .u-on-dark .btn--ghost { color: var(--c-on-dark); }
 .u-on-dark .btn--ghost:hover { background: var(--c-on-dark); color: var(--c-ink); }
+/* .hero es superficie oscura pero NO lleva la clase .u-on-dark (declara su
+   color a mano), asi que la regla de arriba no casaba y el unico .btn--ghost
+   del sitio salia con texto Y borde de carbon sobre --c-green-deep: 2,00:1.
+   Blanco sobre ese verde da 8,73:1. */
+.hero .btn--ghost { color: var(--c-on-dark); }
+.hero .btn--ghost:hover { background: var(--c-on-dark); color: var(--c-ink); }
 
 /* Enlace de texto con subrayado que crece al pasar. */
 .link-more {
@@ -223,16 +227,22 @@ html:not(.js) .site-nav[hidden] { display: block; }
   font-family: var(--ff-display);
   font-size: 1.25rem;
 }
-/* El conector punteado, en CSS: adios a Line-recta.svg y Line-recta-lateral.svg */
-.step:not(:last-child) .step__marker::after {
+/* El conector punteado, en CSS: adios a Line-recta.svg y Line-recta-lateral.svg
+   Va sobre el .step, NO sobre el marcador. Colgado del marcador, su altura era
+   un calc contra el propio marcador y resolvia a 56px FIJOS, mientras el hueco
+   real lo fija el texto del paso: de 79 a 176px segun el ancho. La linea se
+   quedaba corta siempre, entre 23 y 120px. El .step ya es position:relative y
+   su padding-block-end acaba justo donde empieza el marcador siguiente, asi
+   que inset-block: 3.25rem 0 cubre el hueco entero a cualquier ancho. */
+.step:not(:last-child)::after {
   content: "";
   position: absolute;
-  top: 100%; left: 50%;
-  width: 0; height: calc(100% + var(--s-7) - 3.25rem + 0.5rem);
+  inset-block: 3.25rem 0;
+  inset-inline-start: calc(1.625rem - 1px);   /* centro del marcador de 3.25rem */
+  width: 0;
   border-inline-start: 2px dashed var(--c-line);
-  transform: translateX(-1px);
 }
-.u-on-dark .step:not(:last-child) .step__marker::after { border-color: rgb(255 255 255 / .22); }
+.u-on-dark .step:not(:last-child)::after { border-color: rgb(255 255 255 / .22); }
 .step__title { font-size: var(--fs-h3); margin-block-end: var(--s-2); }
 .step__body { color: var(--c-mute); }
 .u-on-dark .step__body { color: var(--c-on-dark-2); }
@@ -242,6 +252,7 @@ html:not(.js) .site-nav[hidden] { display: block; }
    puntos: se puede borrar entero y el carrusel sigue arrastrandose con el dedo.
 */
 .quotes__track {
+  --peek: calc(var(--s-5) + 2.5rem);
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: min(85%, 26rem);
@@ -254,8 +265,16 @@ html:not(.js) .site-nav[hidden] { display: block; }
 }
 .quotes__track::-webkit-scrollbar { display: none; }
 .quotes__track > * { scroll-snap-align: start; display: flex; }
-@media (min-width: 48rem) { .quotes__track { grid-auto-columns: calc((100% - var(--s-5)) / 2); } }
-@media (min-width: 64rem) { .quotes__track { grid-auto-columns: calc((100% - 2 * var(--s-5)) / 3); } }
+/* La tarjeta siguiente tiene que ASOMAR o el carrusel parece una rejilla de
+   tres. La aritmetica es asomo = resta - hueco, asi que se resta el hueco mas
+   el asomo que se quiere: 40px medidos a 768 (13,0% de la tarjeta) y a 1440
+   (11,0%), en linea con el 9,2% que ya funcionaba a 375. */
+@media (min-width: 48rem) {
+  .quotes__track { grid-auto-columns: calc((100% - var(--s-5) - var(--peek)) / 2); }
+}
+@media (min-width: 64rem) {
+  .quotes__track { grid-auto-columns: calc((100% - 2 * var(--s-5) - var(--peek)) / 3); }
+}
 
 .quote {
   display: flex; flex-direction: column; gap: var(--s-4);
@@ -295,7 +314,7 @@ html:not(.js) .site-nav[hidden] { display: block; }
 .quotes__dot::before {                           /* ...con un punto pequeno dentro */
   content: ""; width: .5rem; height: .5rem; border-radius: 50%;
   background: rgb(255 255 255 / .32);
-  transition: background-color var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+  transition: background-color var(--dur-1) var(--ease-out);
 }
 .quotes__dot[aria-current="true"]::before { background: var(--c-green); transform: scale(1.4); }
 
@@ -348,7 +367,10 @@ html:not(.js) .site-nav[hidden] { display: block; }
   max-height: calc(3.5rem * var(--s, 1));
   object-fit: contain;
   filter: grayscale(1);
-  opacity: .66;
+  /* .66 dejaba la mitad de las marcas por debajo de 3:1 de gris medio sobre
+     blanco, y Miami Agro en 1,92:1. Con .78 todas pasan de 3:1 sin recolorear
+     nada: el gris sigue siendo atenuacion, no tinte. */
+  opacity: .78;
 }
 @media (prefers-reduced-motion: no-preference) {
   .logos__item img { transition: opacity var(--dur-2) var(--ease-out), filter var(--dur-2) var(--ease-out); }
@@ -401,9 +423,10 @@ html:not(.js) .site-nav[hidden] { display: block; }
    ========================================================================== */
 .w-form-done, .w-form-fail { display: none; }
 
+/* Sin radio: --r-1 y --r-2 estan reservados a botones y campos, y esto no es
+   ni lo uno ni lo otro. Se separa con el filete inset, como el resto. */
 .w-form-done, .w-form-fail {
   padding: var(--s-5) var(--s-6);
-  border-radius: var(--r-2);
   font-weight: 600;
 }
 .w-form-done { background: rgb(67 181 86 / .14); box-shadow: inset 0 0 0 1px var(--c-green); color: var(--c-ink); }
@@ -413,7 +436,7 @@ html:not(.js) .site-nav[hidden] { display: block; }
 /* --------------------------------------------------------------- pie de pagina */
 .site-footer { background: var(--c-ink); color: var(--c-on-dark); }
 .footer-cta { text-align: center; }
-.footer-cta__title { font-size: var(--fs-h1); max-width: 18ch; margin-inline: auto; }
+.footer-cta__title { font-size: var(--fs-h1); margin-inline: auto; }   /* el max-width real son 24ch, mas abajo */
 .footer-body { display: grid; gap: var(--s-8); padding-block: var(--section-y); }
 @media (min-width: 48rem) { .footer-body { grid-template-columns: 1.4fr 1fr 1fr; } }
 .footer-col__title {

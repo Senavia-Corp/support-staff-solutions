@@ -23,7 +23,7 @@
    foto: por eso el degradado de la derecha puede bajar a .22/.38 y dejar
    pasar el color de las rosas. */
 .hero .plane { --split: 52%; }
-.hero__inner { padding-block: var(--s-6) calc(var(--section-y) + var(--diag)); }
+.hero__inner { padding-block: var(--s-6) var(--diag-pad); }
 
 /* En movil el plano NO tapa la foto entera: la fotografia respira arriba y el
    plano verde entra por debajo con el borde superior en diagonal, que es como
@@ -63,7 +63,13 @@
 @keyframes sss-settle { from { transform: scale(1.06); } to { transform: none; } }
 
 /* --- franja de marcas ------------------------------------------------------ */
-.brands { padding-block: var(--s-8); }
+/* .brands y la seccion de servicios son las dos blancas y se leian como una
+   sola: 2.140px de blanco corrido a 375. Un filete marca la costura sin mover
+   la franja a --c-paper-2, que es lo que haria aparecer las cajas blancas
+   opacas de dos de los seis logos. Cuando lleguen el PNG con alfa de Miami
+   Agro y el SVG morado de The Elite Flower, esto se puede sustituir por el
+   cambio de fondo. */
+.brands { padding-block: var(--s-8); border-block-end: 1px solid var(--c-line); }
 .brands__title { font-size: var(--fs-h3); text-align: center; margin-block-end: var(--s-6); }
 
 /* --- servicios ------------------------------------------------------------- */
@@ -87,7 +93,7 @@
   }
 }
 .who .plane { --split: 58%; }
-.who__inner { padding-block: var(--section-y) calc(var(--section-y) + var(--diag)); }
+.who__inner { padding-block: var(--section-y) var(--diag-pad); }
 .who__body { max-width: 50ch; color: var(--c-on-dark-2); }
 .who__body p + p { margin-block-start: var(--s-4); }
 .who__pull {
@@ -123,7 +129,7 @@
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(rgb(27 25 25 / .80), rgb(42 84 45 / .80));
 }
-.cta-band__inner { padding-block: calc(var(--section-y) + var(--diag)); }
+.cta-band__inner { padding-block: var(--diag-pad); }
 .cta-band__title { font-size: var(--fs-h1); max-width: 18ch; margin-inline: auto; }
 .cta-band__lead { margin-block-start: var(--s-5); margin-inline: auto; color: var(--c-on-dark-2); }
 .cta-band__actions { margin-block-start: var(--s-7); display: flex; flex-wrap: wrap; gap: var(--s-4); justify-content: center; }
@@ -141,9 +147,14 @@
 /* ============================ CABECERA DE PAGINA INTERIOR ================= */
 .page-hero { background: var(--c-green-deep); color: var(--c-on-dark); }
 .page-hero--ink { background: var(--c-ink); }
-.page-hero__inner { padding-block: var(--section-y) calc(var(--section-y) + var(--diag)); }
+.page-hero__inner { padding-block: var(--section-y) var(--diag-pad); }
 .page-hero__title { font-size: var(--fs-h1); max-width: 16ch; }
-.page-hero__lead { margin-block-start: var(--s-5); color: var(--c-on-dark-2); max-width: 48ch; }
+/* 34ch, no 48ch, y es el mismo que usa el lead del hero de la home. Con 48ch
+   la caja media 759px contra un plano opaco que acaba en el 48% del ancho:
+   el parrafo salia del plano y caia sobre la foto. Medido: 1,27:1 en
+   /services a 1440 y 1,41:1 en /about-us. Con 34ch ninguna linea cruza y el
+   peor punto sube a 10,45:1 y 5,85:1. */
+.page-hero__lead { margin-block-start: var(--s-5); color: var(--c-on-dark-2); max-width: 34ch; }
 
 /* Hero de pagina CON fotografia.
    Tres decisiones, y las tres son a proposito:
@@ -195,6 +206,9 @@
 /* Fichas de ancla del hero de servicios: ademas de navegar, son la prueba en
    pagina de que scroll-padding-top deja el destino por debajo de la barra. */
 .anchor-chips { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-block-start: var(--s-7); }
+/* Mismo motivo que el lead: la tercera ficha acababa 16px pasado el corte y su
+   anillo de foco caia sobre una zona clara de la foto, a 1,98:1. */
+@media (min-width: 64rem) { .anchor-chips { max-width: 45%; } }
 .anchor-chip {
   display: inline-flex; align-items: center; min-height: 2.75rem;
   padding-inline: var(--s-5);
@@ -225,7 +239,13 @@
 
 .profile { background: var(--c-paper-2); }
 .profile__grid { display: grid; gap: var(--s-7); }
-@media (min-width: 64rem) { .profile__grid { grid-template-columns: 14rem 1fr; gap: var(--s-10); align-items: start; } }
+@media (min-width: 64rem) {
+  .profile__grid { grid-template-columns: 14rem 1fr; gap: var(--s-10); align-items: start; }
+  /* El rail medía 331,5px dentro de una fila de 849,9px: 518,4px de columna
+     izquierda vacia, el 61%. Acompana al texto en vez de quedarse arriba,
+     igual que .why__intro. */
+  .profile__rail { position: sticky; top: calc(var(--header-h) + var(--s-6)); }
+}
 .profile__rail { display: flex; flex-direction: column; gap: var(--s-3); }
 .profile__avatar { width: 12rem; height: 12rem; border-radius: 50%; object-fit: cover; object-position: 50% 18%; }
 .profile__name { font-size: var(--fs-h2); }
@@ -242,7 +262,7 @@
   max-width: 32ch;
 }
 
-.mission__inner { padding-block: calc(var(--section-y) + var(--diag)) var(--section-y); color: var(--c-ink); }
+.mission__inner { padding-block: var(--diag-pad) var(--section-y); color: var(--c-ink); }
 .mission__grid { display: grid; gap: var(--s-8); }
 @media (min-width: 64rem) { .mission__grid { grid-template-columns: 1fr 1fr; gap: var(--s-10); } }
 .mission__body { max-width: 46ch; }
@@ -270,12 +290,21 @@
 .svc-alt { background: var(--c-paper-2); }
 
 /* Lo que incluye el servicio: plano verde, cortado arriba. */
-.includes__inner { padding-block: calc(var(--section-y) + var(--diag)) var(--section-y); color: var(--c-ink); }
+.includes__inner { padding-block: var(--diag-pad) var(--section-y); color: var(--c-ink); }
 .includes__grid { display: grid; margin-block-start: var(--s-7); }
 @media (min-width: 40rem) { .includes__grid { grid-template-columns: 1fr 1fr; column-gap: var(--s-8); } }
-@media (min-width: 64rem) { .includes__grid { grid-template-columns: repeat(3, 1fr); } }
+/* "Workers' compensation insurance" necesita ~13,5em de caja para caber en una
+   linea, y a 28px eso son 364px. Con tres columnas y el hueco de --s-8 la
+   columna medía 357px, asi que partia y dejaba "insurance" sola; text-wrap:
+   balance no puede hacer nada si sencillamente no cabe. Tres columnas solo
+   caben cuando .u-page toca su tope de 75rem, y eso pasa a partir de 80rem de
+   viewport: por debajo la caja se queda corta a cualquier hueco. Hasta ahi,
+   dos columnas. El hueco baja a --s-6 para dar los ultimos pixeles. */
+@media (min-width: 80rem) { .includes__grid { grid-template-columns: repeat(3, 1fr); column-gap: var(--s-6); } }
 .includes__item { padding-block: var(--s-5); border-block-start: 1px solid rgb(27 25 25 / .24); }
-.includes__term { font-family: var(--ff-display); font-size: var(--fs-h3); letter-spacing: var(--tr-display); }
+/* <dt> no es un heading, asi que el text-wrap: balance de base.css no le
+   llegaba y "Workers' compensation insurance" dejaba "insurance" sola. */
+.includes__term { font-family: var(--ff-display); font-size: var(--fs-h3); letter-spacing: var(--tr-display); text-wrap: balance; }
 .includes__desc { color: rgb(27 25 25 / .86);   /* .76 daba 4,44:1 sobre el verde: por debajo de AA */ font-size: var(--fs-sm); margin-block-start: var(--s-1); }
 
 /* Puestos que cubrimos: la seccion que mas debe parecer una pagina del folleto. */
@@ -296,7 +325,7 @@
 
 /* ============================ CONTACTO ==================================== */
 .contact-hero { background: var(--c-green-deep); color: var(--c-on-dark); }
-.contact-hero__inner { padding-block: var(--section-y) calc(var(--section-y) + var(--diag)); }
+.contact-hero__inner { padding-block: var(--section-y) var(--diag-pad); }
 
 /* Las fichas cruzan el corte a proposito: son opacas, asi que ahi el solape es seguro. */
 .contact-tiles { display: grid; gap: var(--s-4); margin-block-start: var(--s-8); }
@@ -311,7 +340,7 @@
   background: var(--c-ink);
   box-shadow: inset 0 3px 0 var(--c-green), var(--shadow-1);
   text-decoration: none;
-  transition: transform var(--dur-2) var(--ease-out), background-color var(--dur-2) var(--ease-out);
+  transition: background-color var(--dur-2) var(--ease-out);
 }
 .contact-tile img { width: 1.75rem; height: 1.75rem; margin-block-end: var(--s-2); }
 .contact-tile__label { font-size: var(--fs-sm); color: var(--c-on-dark-2); }
@@ -341,7 +370,12 @@ a.contact-tile:hover { background: var(--c-ink-2); transform: translateY(-2px); 
 
 /* --- franja de cifras (sustituye al divisor decorativo de plantilla) ------- */
 .facts { background: var(--c-ink); }
-.facts__inner { padding-block: calc(var(--section-y) * .6 + var(--diag)); color: var(--c-on-dark); }
+/* Aire medido: 70,9% a 1440 y 74,3% a 1920, con tres numeros de 131,8px
+   dentro de 453,6px. Dos causas: el factor .6 y el --diag, que reservaba
+   sitio para dos cunas. Las cunas se han ido —el hero de arriba ya pone la
+   diagonal de esa pantalla y las dos juntas hacian un zigzag— asi que ya no
+   hay nada que reservar. Queda en 39,8% de aire. */
+.facts__inner { padding-block: clamp(var(--s-6), calc(var(--section-y) * .45), var(--s-8)); color: var(--c-on-dark); }
 .facts__grid { display: grid; gap: var(--s-6); }
 @media (min-width: 40rem) { .facts__grid { grid-template-columns: repeat(3, 1fr); gap: var(--s-8); } }
 .fact__num { font-family: var(--ff-display); font-size: var(--fs-h1); line-height: 1; color: var(--c-green); letter-spacing: var(--tr-display); }

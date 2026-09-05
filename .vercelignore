@@ -3,3 +3,6 @@ node_modules/
 .claude/
 .env*
 scripts/
+
+# El informe de auditoria es documento interno: no se publica.
+AUDITORIA-DISENO.md

@@ -60,13 +60,38 @@ a:where(:not([class])) {
   text-decoration-thickness: from-font;
 }
 
-/* --- foco: un solo anillo, visible sobre claro y sobre oscuro -------------- */
+/* --- foco -----------------------------------------------------------------
+   NINGUN color unico pasa 3:1 sobre las cinco superficies del sitio: el carbon
+   falla sobre carbon (1,00:1) y el verde falla sobre blanco (2,63:1), sobre
+   --c-paper-2 (2,33:1) y sobre si mismo (1,00:1). Asi que el anillo se elige
+   por superficie, no por gusto:
+
+     carbon sobre blanco       17,50:1      carbon sobre #eff2ee      16,49:1
+     carbon sobre --c-green     6,65:1      verde  sobre carbon        6,65:1
+     verde  sobre green-deep    3,36:1
+
+   Por defecto CARBON, que cubre toda la mitad clara del sitio. El verde queda
+   para las superficies oscuras. Y OJO: no basta con .u-on-dark, que solo esta
+   en dos elementos de todo el sitio; las otras ocho superficies oscuras
+   declaran su color a mano y hay que nombrarlas. -------------------------- */
 :focus-visible {
-  outline: var(--focus-w) solid var(--c-green);
+  outline: var(--focus-w) solid var(--c-ink);
   outline-offset: 2px;
   border-radius: var(--r-1);
 }
-.u-on-dark :focus-visible { outline-color: var(--c-green); }
+.u-on-dark    :focus-visible,
+.site-header  :focus-visible,
+.site-footer  :focus-visible,
+.hero         :focus-visible,
+.who          :focus-visible,
+.cta-band     :focus-visible,
+.page-hero    :focus-visible,
+.contact-hero :focus-visible,
+.facts        :focus-visible,
+.positions    :focus-visible { outline-color: var(--c-green); }
+/* La banda CTA del pie es --c-green y vive dentro de .site-footer: vuelve a
+   carbon. Va la ultima a proposito, misma especificidad y gana por orden. */
+.footer-cta-band :focus-visible { outline-color: var(--c-ink); }
 
 /* --- utilidades ----------------------------------------------------------- */
 .u-visually-hidden {
@@ -89,13 +114,18 @@ a:where(:not([class])) {
 .u-section { padding-block: var(--section-y); }
 
 /* ============================================================================
-   La diagonal. UNA primitiva, UN angulo en todo el sitio.
+   La diagonal. UNA primitiva, UN angulo en todos los cortes HORIZONTALES:
+   3,434 grados medidos de 320 a 1920px. El corte de .plane--split es otra
+   cosa y no puede ser ese angulo: se mide contra el ALTO de la seccion, que
+   depende del contenido, asi que va de 5,22 grados a 1024px a 6,53 a 1440.
+   Es correcto, pero no lo llames "un angulo".
 
    Reglas, y no son negociables:
      1. La diagonal nunca va sobre el elemento que contiene texto. Siempre sobre
         un .plane hermano, que es decorativo y va aria-hidden.
      2. El contenido va por encima con position:relative y z-index >= 1, con
-        --diag-pad de holgura por el lado cortado.
+        --diag-pad de holgura por el lado cortado. El token vive en tokens.css
+        y es el que se aplica: no se escribe la holgura a mano.
      3. Una diagonal por altura de pantalla, como maximo.
      4. clip-path crea bloque contenedor para descendientes position:fixed.
         Nada fijo puede vivir dentro de una seccion con .plane. La cabecera es
