@@ -84,12 +84,12 @@
    se parte, que es lo que pasaba antes de rehacer la imagen. */
 @media (min-width: 64rem) {
   .who {
-    /* El original de esta imagen solo mide 1672px, no los 2880 que pide el
-       hueco a DPR2. Es lo que hay: a 1x se sirve nitida, de 1,5x en adelante
-       el navegador la escala. Si aparece un original mayor, basta cambiar
-       estas rutas. */
+    /* El original mide ahora 2752px (stock/originales/warehouse-crew-expandido-
+       2752.png), asi que el 2x ya se sirve casi nativo: al hueco a DPR2 le
+       faltan 2880-2200 px de nada y el navegador apenas escala. */
     background-image: image-set(url('../images/warehouse-crew-1300.jpg') 1x,
-                                url('../images/warehouse-crew-1672.jpg') 1.5x);
+                                url('../images/warehouse-crew-1672.jpg') 1.5x,
+                                url('../images/warehouse-crew-2200.jpg') 2x);
     background-size: cover;
     /* 25% y no 50%: a 1920 la seccion solo mide 661px y el recorte vertical se
        come 415px. Centrado dejaba la ventana en 19,3%-80,7% y decapitaba al
@@ -327,6 +327,11 @@
   max-width: 32ch;
 }
 
+/* El plano carbon deja al descubierto la cuna de arriba a la derecha. Sin fondo
+   propio esa cuna es el blanco del body y la diagonal se lee como un corte
+   suelto; con el gris de .profile continua la seccion anterior y el corte se
+   lee como lo que es. */
+.mission { background: var(--c-paper-2); }
 .mission__inner { padding-block: var(--diag-pad) var(--section-y); color: var(--c-on-dark); }
 .mission__grid { display: grid; gap: var(--s-8); }
 @media (min-width: 64rem) { .mission__grid { grid-template-columns: 1fr 1fr; gap: var(--s-10); } }
