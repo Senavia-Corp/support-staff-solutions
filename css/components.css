@@ -247,6 +247,9 @@
 .quotes__btn:hover:not([disabled]) { background: var(--c-green); color: var(--c-ink); box-shadow: none; }
 .quotes__btn[disabled] { opacity: .35; cursor: default; }
 .quotes__btn svg { width: 1.1rem; height: 1.1rem; fill: currentColor; }
+/* El chevron no cae centrado en su viewBox: sin este nudge se ve descuadrado */
+[data-carousel-prev] svg { margin-inline-end: 2px; }
+[data-carousel-next] svg { margin-inline-start: 2px; }
 .quotes__dots { display: flex; gap: var(--s-2); margin-inline-start: auto; }
 .quotes__dot {
   width: 2.75rem; height: 2.75rem;              /* area de toque completa... */
@@ -262,8 +265,9 @@
 /* -------------------------------------------------------------- logos cliente
    Se monta con marcadores hasta que el cliente envie los logos reales. */
 .logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--s-6) var(--s-8); }
-.logos__item { height: 2.5rem; display: grid; place-items: center; }
-.logos__item img { max-height: 100%; width: auto; filter: grayscale(1); opacity: .62; transition: opacity var(--dur-2) var(--ease-out), filter var(--dur-2) var(--ease-out); }
+.logos__item { min-height: 2.75rem; display: grid; place-items: center; }
+.logos__item a { display: grid; place-items: center; min-height: 2.75rem; padding-inline: var(--s-2); }
+.logos__item img { max-height: 2.5rem; width: auto; filter: grayscale(1); opacity: .62; transition: opacity var(--dur-2) var(--ease-out), filter var(--dur-2) var(--ease-out); }
 .logos__item:hover img { filter: none; opacity: 1; }
 .logos__placeholder {
   height: 2.5rem; min-width: 8rem;
@@ -343,7 +347,7 @@
 }
 .footer-col li + li { margin-block-start: var(--s-3); }
 .footer-col a, .footer-col span { color: var(--c-on-dark-2); text-decoration: none; overflow-wrap: anywhere; }
-.footer-col a { transition: color var(--dur-1) var(--ease-out); }
+.footer-col a { display: inline-flex; align-items: center; min-height: 2.75rem; transition: color var(--dur-1) var(--ease-out); }
 .footer-col a:hover { color: var(--c-on-dark); }
 .footer-address {
   font-family: var(--ff-display);
@@ -372,3 +376,6 @@
 .footer-partner__name { font-weight: 600; color: var(--c-on-dark); }
 .footer-partner__role { color: var(--c-on-dark-2); font-size: var(--fs-sm); }
 .footer-cta__logo { width: min(16rem, 62vw); height: auto; margin: 0 auto var(--s-6); }
+
+/* --- pulsado: el mismo gesto en todo lo que se pulsa ---------------------- */
+.quotes__btn:active:not([disabled]), .nav-toggle:active, .anchor-chip:active { transform: translateY(1px); }

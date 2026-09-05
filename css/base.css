@@ -5,7 +5,11 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 body {
   margin: 0;
@@ -15,7 +19,6 @@ body {
   font-weight: 500;
   font-size: var(--fs-body);
   line-height: var(--lh-body);
-  -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 

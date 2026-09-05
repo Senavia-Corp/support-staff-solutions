@@ -100,7 +100,10 @@
   --r-1: 2px;
   --r-2: 4px;   /* solo botones y campos, para que sigan leyendose controles */
 
-  /* ---- elevacion: una sombra y un anillo. Mas pelea con lo plano --------- */
+  /* ---- elevacion ---------------------------------------------------------
+     El diseno separa con filetes, no con sombras. La UNICA sombra del sitio
+     esta en las fichas de contacto, que se montan sobre el corte diagonal y
+     necesitan despegarse de los dos planos a la vez. ---------------------- */
   --shadow-1: 0 1px 2px rgb(27 25 25 / .06), 0 10px 28px -14px rgb(27 25 25 / .22);
   --focus-w:  3px;
 
@@ -116,7 +119,6 @@
      El clamp evita que desaparezca bajo 340px o se coma 180px a 2560px.
      ---------------------------------------------------------------------- */
   --diag:     clamp(1.25rem, 6vw, 6.5rem);
-  --diag-pad: calc(var(--diag) + var(--s-6));
 
   /* ---- cabecera ----------------------------------------------------------
      Altura CONSTANTE a proposito. El shrink 100->65px del sitio antiguo movia

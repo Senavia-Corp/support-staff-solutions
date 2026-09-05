@@ -230,7 +230,7 @@
   display: flex; flex-direction: column; gap: var(--s-2);
   padding: var(--s-6);
   background: var(--c-ink);
-  box-shadow: inset 0 3px 0 var(--c-green);
+  box-shadow: inset 0 3px 0 var(--c-green), var(--shadow-1);
   text-decoration: none;
   transition: transform var(--dur-2) var(--ease-out), background-color var(--dur-2) var(--ease-out);
 }
