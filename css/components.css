@@ -1,0 +1,364 @@
+/* ============================================================================
+   Componentes
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- cabecera */
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  background: rgb(27 25 25 / .94);
+  border-block-end: 1px solid rgb(255 255 255 / .10);
+  color: var(--c-on-dark);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .site-header { background: rgb(27 25 25 / .86); backdrop-filter: blur(10px); }
+}
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-5);
+  min-height: var(--header-h);
+}
+.site-header__brand { display: flex; align-items: center; flex: 0 0 auto; }
+.site-header__brand img { height: 2.25rem; width: auto; }
+@media (min-width: 64rem) { .site-header__brand img { height: 2.75rem; } }
+
+/* El sitio empieza bajo la barra fija. Un solo sitio donde se compensa. */
+.site-main { padding-block-start: var(--header-h); }
+
+/* --- navegacion -------------------------------------------------------------
+   Sin JS la lista se ve siempre (apilada en movil). El boton y el panel
+   plegable solo existen cuando `html.js` esta puesto, asi que la navegacion
+   nunca depende de JavaScript para ser alcanzable.
+   -------------------------------------------------------------------------- */
+.nav-toggle { display: none; }
+
+.site-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-1) var(--s-5);
+}
+.site-nav__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;                 /* area de toque */
+  padding-inline: var(--s-1);
+  text-decoration: none;
+  font-weight: 500;
+  color: var(--c-on-dark-2);
+  transition: color var(--dur-1) var(--ease-out);
+}
+.site-nav__link:hover { color: var(--c-on-dark); }
+.site-nav__link[aria-current="page"] {
+  color: var(--c-on-dark);
+  box-shadow: inset 0 -2px 0 var(--c-green);
+}
+
+@media (max-width: 63.99rem) {
+  html.js .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem; height: 2.75rem;
+    margin-inline-end: calc(var(--s-1) * -1);
+    color: var(--c-on-dark);
+  }
+  html.js .nav-toggle__bars,
+  html.js .nav-toggle__bars::before,
+  html.js .nav-toggle__bars::after {
+    display: block; width: 22px; height: 2px; background: currentColor;
+    transition: transform var(--dur-2) var(--ease-out), opacity var(--dur-1) linear;
+  }
+  html.js .nav-toggle__bars { position: relative; }
+  html.js .nav-toggle__bars::before,
+  html.js .nav-toggle__bars::after { content: ""; position: absolute; inset-inline-start: 0; }
+  html.js .nav-toggle__bars::before { top: -7px; }
+  html.js .nav-toggle__bars::after  { top:  7px; }
+
+  html.js .nav-toggle[aria-expanded="true"] .nav-toggle__bars { background: transparent; }
+  html.js .nav-toggle[aria-expanded="true"] .nav-toggle__bars::before { transform: translateY(7px) rotate(45deg); }
+  html.js .nav-toggle[aria-expanded="true"] .nav-toggle__bars::after  { transform: translateY(-7px) rotate(-45deg); }
+
+  html.js .site-nav {
+    position: fixed;
+    inset: var(--header-h) 0 0;
+    background: var(--c-ink);
+    padding: var(--s-7) var(--gutter) var(--s-9);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  html.js .site-nav[hidden] { display: none; }
+  html.js .site-nav__list { flex-direction: column; align-items: stretch; gap: 0; }
+  html.js .site-nav__link {
+    font-family: var(--ff-display);
+    font-size: var(--fs-h3);
+    letter-spacing: var(--tr-display);
+    min-height: 3.5rem;
+    border-block-end: 1px solid rgb(255 255 255 / .12);
+  }
+  html.js .site-nav__link[aria-current="page"] { box-shadow: none; color: var(--c-green); }
+  html.js .site-nav__cta { margin-block-start: var(--s-6); justify-content: center; }
+  html:has(.site-nav:not([hidden])) { overflow: hidden; }   /* no scroll detras */
+}
+
+/* ----------------------------------------------------------------- botones */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: 3rem;
+  padding: var(--s-3) var(--s-6);
+  border-radius: var(--r-2);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  transition: background-color var(--dur-1) var(--ease-out),
+              color var(--dur-1) var(--ease-out),
+              transform var(--dur-1) var(--ease-out);
+}
+.btn:active { transform: translateY(1px); }
+
+/* Relleno verde con tinta CARBON. Blanco sobre verde da 2,63:1 y falla AA. */
+.btn--green { background: var(--c-green); color: var(--c-ink); }
+.btn--green:hover { background: var(--c-green-press); }
+
+.btn--ink { background: var(--c-ink); color: var(--c-on-dark); }
+.btn--ink:hover { background: var(--c-ink-2); }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--c-ink);
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+.btn--ghost:hover { background: var(--c-ink); color: var(--c-on-dark); }
+
+.u-on-dark .btn--ghost, .u-on-deep .btn--ghost { color: var(--c-on-dark); }
+.u-on-dark .btn--ghost:hover, .u-on-deep .btn--ghost:hover { background: var(--c-on-dark); color: var(--c-ink); }
+
+/* Enlace de texto con subrayado que crece al pasar. */
+.link-more {
+  display: inline-block;
+  font-weight: 600;
+  color: var(--c-green-ink);
+  text-decoration: none;
+  box-shadow: inset 0 -2px 0 var(--c-green);
+  transition: box-shadow var(--dur-2) var(--ease-out), color var(--dur-1) var(--ease-out);
+}
+.link-more:hover { box-shadow: inset 0 -.7em 0 var(--c-green); color: var(--c-ink); }
+.u-on-dark .link-more { color: var(--c-green); }
+.u-on-dark .link-more:hover { color: var(--c-ink); }
+
+/* ------------------------------------------------------ tarjeta de servicio
+   La diagonal aparece aqui a escala de COMPONENTE, recortando solo la foto.
+   Sin borde y sin sombra: no es una tarjeta de SaaS, es una foto con pie. */
+.svc { display: flex; flex-direction: column; gap: var(--s-4); }
+.svc__media {
+  aspect-ratio: 3 / 2;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 2.5rem));
+}
+.svc__title { font-size: var(--fs-h3); }
+.svc__body { color: var(--c-mute); }
+
+/* ------------------------------------------------------------ valor / bloque
+   Sin caja: filete entre elementos. Evita la rejilla de tarjetas identicas. */
+.value { padding-block: var(--s-6); border-block-start: 1px solid var(--c-line); }
+.value__icon { width: 2.75rem; height: 2.75rem; margin-block-end: var(--s-4); }
+.value__title { font-size: var(--fs-h3); margin-block-end: var(--s-2); }
+.value__body { color: var(--c-mute); }
+.u-on-dark .value { border-block-start-color: rgb(255 255 255 / .16); }
+
+/* --------------------------------------------------------- proceso (3 pasos)
+   Los numeros estan permitidos aqui porque esto SI es una secuencia. */
+.steps { position: relative; }
+.step { position: relative; display: grid; grid-template-columns: auto 1fr; gap: var(--s-5); padding-block-end: var(--s-7); }
+.step:last-child { padding-block-end: 0; }
+.step__marker {
+  position: relative;
+  display: grid; place-items: center;
+  width: 3.25rem; height: 3.25rem;
+  background: var(--c-green);
+  color: var(--c-ink);
+  border-radius: 50%;
+  font-family: var(--ff-display);
+  font-size: 1.25rem;
+}
+/* El conector punteado, en CSS: adios a Line-recta.svg y Line-recta-lateral.svg */
+.step:not(:last-child) .step__marker::after {
+  content: "";
+  position: absolute;
+  top: 100%; left: 50%;
+  width: 0; height: calc(100% + var(--s-7) - 3.25rem + 0.5rem);
+  border-inline-start: 2px dashed var(--c-line);
+  transform: translateX(-1px);
+}
+.u-on-dark .step:not(:last-child) .step__marker::after { border-color: rgb(255 255 255 / .22); }
+.step__title { font-size: var(--fs-h3); margin-block-end: var(--s-2); }
+.step__body { color: var(--c-mute); }
+.u-on-dark .step__body { color: var(--c-on-dark-2); }
+
+/* ------------------------------------------------------------ testimonios
+   El desplazamiento lo hace CSS (scroll-snap). El JS solo anade flechas y
+   puntos: se puede borrar entero y el carrusel sigue arrastrandose con el dedo.
+*/
+.quotes__track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(85%, 26rem);
+  gap: var(--s-5);
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-block-end: var(--s-2);
+}
+.quotes__track::-webkit-scrollbar { display: none; }
+.quotes__track > * { scroll-snap-align: start; }
+@media (min-width: 48rem) { .quotes__track { grid-auto-columns: calc((100% - var(--s-5)) / 2); } }
+@media (min-width: 64rem) { .quotes__track { grid-auto-columns: calc((100% - 2 * var(--s-5)) / 3); } }
+
+.quote {
+  display: flex; flex-direction: column; gap: var(--s-4);
+  padding: var(--s-6);
+  background: rgb(255 255 255 / .05);
+  border-block-start: 3px solid var(--c-green);
+  margin: 0;
+}
+.quote__stars { display: flex; gap: 2px; color: var(--c-green); }
+.quote__stars svg { width: 1rem; height: 1rem; fill: currentColor; }
+.quote__text { font-size: var(--fs-lead); line-height: var(--lh-lead); margin: 0; }
+.u-on-dark .quote__text { color: var(--c-on-dark); }
+.quote__by { margin-block-start: auto; padding-block-start: var(--s-3); }
+.quote__name { font-family: var(--ff-display); font-size: 1.125rem; letter-spacing: .01em; }
+.quote__role { font-size: var(--fs-sm); color: var(--c-on-dark-2); }
+
+.quotes__nav { display: flex; gap: var(--s-3); align-items: center; margin-block-start: var(--s-6); }
+.quotes__btn {
+  display: grid; place-items: center;
+  width: 2.75rem; height: 2.75rem;
+  border-radius: 50%;
+  color: var(--c-on-dark);
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / .3);
+  transition: background-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
+}
+.quotes__btn:hover:not([disabled]) { background: var(--c-green); color: var(--c-ink); box-shadow: none; }
+.quotes__btn[disabled] { opacity: .35; cursor: default; }
+.quotes__btn svg { width: 1.1rem; height: 1.1rem; fill: currentColor; }
+.quotes__dots { display: flex; gap: var(--s-2); margin-inline-start: auto; }
+.quotes__dot {
+  width: 2.75rem; height: 2.75rem;              /* area de toque completa... */
+  display: grid; place-items: center;
+}
+.quotes__dot::before {                           /* ...con un punto pequeno dentro */
+  content: ""; width: .5rem; height: .5rem; border-radius: 50%;
+  background: rgb(255 255 255 / .32);
+  transition: background-color var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+}
+.quotes__dot[aria-current="true"]::before { background: var(--c-green); transform: scale(1.4); }
+
+/* -------------------------------------------------------------- logos cliente
+   Se monta con marcadores hasta que el cliente envie los logos reales. */
+.logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--s-6) var(--s-8); }
+.logos__item { height: 2.5rem; display: grid; place-items: center; }
+.logos__item img { max-height: 100%; width: auto; filter: grayscale(1); opacity: .62; transition: opacity var(--dur-2) var(--ease-out), filter var(--dur-2) var(--ease-out); }
+.logos__item:hover img { filter: none; opacity: 1; }
+.logos__placeholder {
+  height: 2.5rem; min-width: 8rem;
+  display: grid; place-items: center;
+  color: var(--c-mute); font-size: var(--fs-xs);
+  box-shadow: inset 0 0 0 1px var(--c-line);
+  border-radius: var(--r-1);
+}
+
+/* ------------------------------------------------------------------ formularios */
+.field { display: flex; flex-direction: column; gap: var(--s-2); }
+.field__label { font-weight: 600; font-size: var(--fs-sm); }
+.field__hint { font-size: var(--fs-sm); color: var(--c-mute); }
+.field input, .field textarea, .field select {
+  width: 100%;
+  min-height: 3rem;
+  padding: var(--s-3) var(--s-4);
+  background: var(--c-paper);
+  color: var(--c-ink);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-2);
+  transition: border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
+}
+.field input::placeholder, .field textarea::placeholder { color: var(--c-mute); }
+.field input:hover, .field textarea:hover { border-color: var(--c-mute); }
+.field input:focus-visible, .field textarea:focus-visible {
+  outline: none;
+  border-color: var(--c-green-ink);
+  box-shadow: 0 0 0 var(--focus-w) rgb(67 181 86 / .32);
+}
+.field textarea { min-height: 9rem; resize: vertical; }
+
+.fieldset { border: 0; padding: 0; margin: 0; }
+.fieldset__legend {
+  font-family: var(--ff-display);
+  font-size: var(--fs-h3);
+  letter-spacing: var(--tr-display);
+  padding: 0;
+  margin-block-end: var(--s-2);
+}
+.fieldset__note { color: var(--c-mute); font-size: var(--fs-sm); margin-block-end: var(--s-5); max-width: 56ch; }
+
+.form-grid { display: grid; gap: var(--s-5); }
+@media (min-width: 40rem) { .form-grid--2 { grid-template-columns: 1fr 1fr; } }
+
+/* ============================================================================
+   IMPORTANTE — paneles de resultado del formulario.
+
+   `display: none` venia de css/webflow.css:326, que este rediseno borra.
+   js/form-submit.js solo hace display:'block' al enviar; NUNCA los oculta al
+   cargar. Sin esta regla los dos mensajes se ven siempre, en las dos paginas
+   con formulario, y sin lanzar ningun error. No borrar.
+   ========================================================================== */
+.w-form-done, .w-form-fail { display: none; }
+
+.w-form-done, .w-form-fail {
+  padding: var(--s-5) var(--s-6);
+  border-radius: var(--r-2);
+  font-weight: 600;
+}
+.w-form-done { background: rgb(67 181 86 / .14); box-shadow: inset 0 0 0 1px var(--c-green); color: var(--c-ink); }
+.w-form-fail { background: rgb(179 38 30 / .08); box-shadow: inset 0 0 0 1px var(--c-danger); color: var(--c-danger); }
+.w-form-done:focus-visible, .w-form-fail:focus-visible { outline-offset: 4px; }
+
+/* --------------------------------------------------------------- pie de pagina */
+.site-footer { background: var(--c-ink); color: var(--c-on-dark); }
+.footer-cta { text-align: center; }
+.footer-cta__title { font-size: var(--fs-h1); max-width: 18ch; margin-inline: auto; }
+.footer-body { display: grid; gap: var(--s-8); padding-block: var(--section-y); }
+@media (min-width: 48rem) { .footer-body { grid-template-columns: 1.4fr 1fr 1fr; } }
+.footer-col__title {
+  font-family: var(--ff-display);
+  font-size: 1.125rem;
+  letter-spacing: .02em;
+  margin-block-end: var(--s-4);
+  color: var(--c-green);
+}
+.footer-col li + li { margin-block-start: var(--s-3); }
+.footer-col a, .footer-col span { color: var(--c-on-dark-2); text-decoration: none; overflow-wrap: anywhere; }
+.footer-col a { transition: color var(--dur-1) var(--ease-out); }
+.footer-col a:hover { color: var(--c-on-dark); }
+.footer-address {
+  font-family: var(--ff-display);
+  font-size: var(--fs-h3);
+  line-height: 1.1;
+  letter-spacing: var(--tr-display);
+  color: var(--c-on-dark);
+  font-style: normal;
+}
+.footer-partner { display: inline-flex; align-items: center; gap: var(--s-3); text-decoration: none; margin-block-start: var(--s-5); }
+.footer-partner img { height: 2.5rem; width: auto; }
+.footer-legal {
+  border-block-start: 1px solid rgb(255 255 255 / .14);
+  padding-block: var(--s-5);
+  font-size: var(--fs-sm);
+  color: var(--c-on-dark-2);
+  display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6); justify-content: space-between;
+}

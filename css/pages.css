@@ -1,0 +1,281 @@
+/* ============================================================================
+   Composicion por pagina
+   ========================================================================== */
+
+/* ============================ HOME ======================================== */
+
+/* --- hero -------------------------------------------------------------------
+   La foto va a sangre y el plano verde profundo la corta. Es la portada del
+   folleto. Un unico <h1> en toda la pagina.
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: end;
+  min-height: min(42rem, 88svh);
+  color: var(--c-on-dark);
+  overflow: clip;
+}
+.hero__media { position: absolute; inset: 0; z-index: 0; }
+.hero__media img { width: 100%; height: 100%; object-fit: cover; object-position: 62% 40%; }
+.hero__media::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(100deg, rgb(27 25 25 / .82) 0 30%, rgb(27 25 25 / .35) 62%, rgb(27 25 25 / .55));
+}
+/* El plano verde profundo, cortado en diagonal, sobre la foto. */
+.hero__plane {
+  position: absolute; inset: 0; z-index: 1;
+  background: var(--c-green-deep);
+  opacity: .92;
+  clip-path: polygon(0 0, calc(52% + var(--diag) / 2) 0, calc(52% - var(--diag) / 2) 100%, 0 100%);
+}
+@media (max-width: 47.99rem) {
+  .hero__plane { clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--diag)), 0 100%); opacity: .9; }
+}
+.hero__inner { position: relative; z-index: 2; padding-block: var(--s-9) var(--section-y); }
+.hero__title { font-size: var(--fs-display); line-height: var(--lh-display); max-width: 13ch; }
+.hero__lead { margin-block-start: var(--s-5); color: var(--c-on-dark-2); max-width: 34ch; }
+.hero__actions { margin-block-start: var(--s-7); display: flex; flex-wrap: wrap; gap: var(--s-4); }
+
+/* --- el unico momento coreografiado del sitio -------------------------------
+   Se ANADE bajo `no-preference`, no se quita bajo `reduce`. Asi el estado por
+   defecto es el estatico y visible: el contenido no puede quedarse invisible
+   nunca, que es exactamente el fallo que traia IX2.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__title   { animation: sss-rise var(--dur-3) var(--ease-out)        both; }
+  .hero__lead    { animation: sss-rise var(--dur-3) var(--ease-out)  90ms  both; }
+  .hero__actions { animation: sss-rise var(--dur-3) var(--ease-out) 170ms  both; }
+  .hero__media img { animation: sss-settle 1400ms var(--ease-out) both; }
+}
+@keyframes sss-rise   { from { opacity: 0; transform: translateY(1.25rem); } to { opacity: 1; transform: none; } }
+@keyframes sss-settle { from { transform: scale(1.06); } to { transform: none; } }
+
+/* --- franja de marcas ------------------------------------------------------ */
+.brands { padding-block: var(--s-8); background: var(--c-paper); }
+.brands__title { font-size: var(--fs-h3); text-align: center; margin-block-end: var(--s-6); }
+
+/* --- servicios ------------------------------------------------------------- */
+.svc-grid { display: grid; gap: var(--s-7); }
+@media (min-width: 40rem) { .svc-grid { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); } }
+
+/* --- quienes somos (la diagonal insignia) ---------------------------------- */
+.who { position: relative; isolation: isolate; overflow: clip; color: var(--c-on-dark); }
+.who__media { position: absolute; inset: 0; z-index: 0; }
+.who__media img { width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; }
+.who__plane {
+  position: absolute; inset: 0; z-index: 1;
+  background: var(--c-green-deep);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--diag)), 0 100%);
+}
+.who__inner { position: relative; z-index: 2; padding-block: var(--section-y) calc(var(--section-y) + var(--diag)); }
+.who__body { max-width: 52ch; color: var(--c-on-dark-2); }
+.who__pull {
+  margin-block-start: var(--s-7);
+  padding-block-start: var(--s-5);
+  border-block-start: 2px solid var(--c-green);
+  font-family: var(--ff-display);
+  font-size: var(--fs-h3);
+  line-height: 1.15;
+  letter-spacing: var(--tr-display);
+  color: var(--c-on-dark);
+  max-width: 26ch;
+}
+@media (min-width: 64rem) {
+  .who__plane { clip-path: polygon(0 0, calc(58% + var(--diag) / 2) 0, calc(58% - var(--diag) / 2) 100%, 0 100%); }
+  .who__inner { padding-block: var(--section-y); }
+  .who__grid { display: grid; grid-template-columns: 52% 1fr; }
+  .who__body { max-width: 42ch; }
+}
+
+/* --- por que elegirnos ----------------------------------------------------- */
+.why { background: var(--c-paper-2); }
+.why__grid { display: grid; gap: var(--s-8); }
+@media (min-width: 64rem) {
+  .why__grid { grid-template-columns: 1fr 1.25fr; gap: var(--s-10); align-items: start; }
+  .why__intro { position: sticky; top: calc(var(--header-h) + var(--s-6)); }
+}
+.why__items { display: grid; gap: 0; }
+@media (min-width: 40rem) { .why__items { grid-template-columns: 1fr 1fr; column-gap: var(--s-7); } }
+
+/* --- cinta de llamada a la accion ------------------------------------------ */
+.cta-band { position: relative; isolation: isolate; overflow: clip; color: var(--c-on-dark); text-align: center; }
+.cta-band__media { position: absolute; inset: 0; z-index: 0; }
+.cta-band__media img { width: 100%; height: 100%; object-fit: cover; }
+.cta-band__media::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(rgb(27 25 25 / .78), rgb(42 84 45 / .78));
+}
+.cta-band__inner { position: relative; z-index: 1; padding-block: calc(var(--section-y) + var(--diag)); }
+.cta-band__title { font-size: var(--fs-h1); max-width: 20ch; margin-inline: auto; }
+.cta-band__lead { margin-block-start: var(--s-5); margin-inline: auto; color: var(--c-on-dark-2); }
+.cta-band__actions { margin-block-start: var(--s-7); display: flex; flex-wrap: wrap; gap: var(--s-4); justify-content: center; }
+
+/* --- proceso --------------------------------------------------------------- */
+.process__grid { display: grid; gap: var(--s-8); }
+@media (min-width: 64rem) { .process__grid { grid-template-columns: 1fr 1fr; gap: var(--s-10); align-items: start; } }
+.process__media { aspect-ratio: 4 / 3; }
+
+/* --- testimonios ----------------------------------------------------------- */
+.quotes { background: var(--c-ink); color: var(--c-on-dark); }
+.quotes__head { max-width: 46ch; margin-block-end: var(--s-8); }
+
+/* ============================ CABECERAS DE PAGINA INTERIOR ================ */
+.page-hero { position: relative; isolation: isolate; overflow: clip; color: var(--c-on-dark); }
+.page-hero__plane {
+  position: absolute; inset: 0; z-index: 0;
+  background: var(--c-green-deep);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--diag)), 0 100%);
+}
+.page-hero--ink .page-hero__plane { background: var(--c-ink); }
+.page-hero__inner {
+  position: relative; z-index: 1;
+  padding-block: var(--section-y) calc(var(--section-y) + var(--diag));
+  max-width: 34ch;
+}
+.page-hero__lead { margin-block-start: var(--s-5); color: var(--c-on-dark-2); max-width: 46ch; }
+.page-hero__inner { max-width: none; }
+.page-hero__title { font-size: var(--fs-h1); max-width: 16ch; }
+
+/* Fichas de ancla del hero de servicios: prueba en pagina de que el ancla cae bien. */
+.anchor-chips { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-block-start: var(--s-7); }
+.anchor-chip {
+  display: inline-flex; align-items: center; min-height: 2.75rem;
+  padding-inline: var(--s-5);
+  border-radius: var(--r-2);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .3);
+  color: var(--c-on-dark); text-decoration: none; font-weight: 600; font-size: var(--fs-sm);
+  transition: background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+}
+.anchor-chip:hover { background: var(--c-green); color: var(--c-ink); box-shadow: none; }
+
+/* ============================ SOBRE NOSOTROS ============================== */
+.values__grid { display: grid; gap: 0; }
+@media (min-width: 40rem) { .values__grid { grid-template-columns: 1fr 1fr; column-gap: var(--s-7); } }
+@media (min-width: 64rem) { .values__grid { grid-template-columns: repeat(4, 1fr); } }
+
+.profile { background: var(--c-paper-2); }
+.profile__grid { display: grid; gap: var(--s-7); }
+@media (min-width: 64rem) { .profile__grid { grid-template-columns: 15rem 1fr; gap: var(--s-10); align-items: start; } }
+.profile__rail { display: flex; flex-direction: column; gap: var(--s-4); }
+.profile__avatar { width: 12rem; height: 12rem; border-radius: 50%; }
+.profile__name { font-size: var(--fs-h2); }
+.profile__role { font-size: var(--fs-sm); font-weight: 600; color: var(--c-green-ink); font-family: var(--ff-body); letter-spacing: 0; }
+.profile__bio > p + p { margin-block-start: var(--s-5); }
+.profile__pull {
+  margin-block: var(--s-6);
+  padding-inline-start: var(--s-5);
+  border-inline-start: 3px solid var(--c-green);
+  font-family: var(--ff-display);
+  font-size: var(--fs-h3);
+  line-height: 1.18;
+  letter-spacing: var(--tr-display);
+  max-width: 30ch;
+}
+
+.mission { position: relative; isolation: isolate; overflow: clip; }
+.mission__plane {
+  position: absolute; inset: 0; z-index: 0;
+  background: var(--c-green);
+  clip-path: polygon(0 0, 100% var(--diag), 100% 100%, 0 100%);
+}
+.mission__inner { position: relative; z-index: 1; padding-block: calc(var(--section-y) + var(--diag)) var(--section-y); color: var(--c-ink); }
+.mission__grid { display: grid; gap: var(--s-8); }
+@media (min-width: 64rem) { .mission__grid { grid-template-columns: 1fr 1fr; gap: var(--s-10); } }
+.mission__body { max-width: 48ch; }
+
+/* ============================ SERVICIOS =================================== */
+.svc-row { display: grid; gap: var(--s-7); align-items: center; }
+@media (min-width: 48rem) { .svc-row { grid-template-columns: 1fr 1fr; gap: var(--s-9); } }
+.svc-row__media { aspect-ratio: 5 / 4; }
+@media (min-width: 48rem) { .svc-row--flip .svc-row__media { order: 2; } }
+.svc-row__title { font-size: var(--fs-h2); margin-block-end: var(--s-4); }
+.svc-row__body { color: var(--c-mute); max-width: 46ch; }
+.svc-row__body p + p { margin-block-start: var(--s-4); }
+.svc-row + .svc-row { margin-block-start: var(--section-y); }
+.svc-alt { background: var(--c-paper-2); }
+
+/* Lo que incluye el servicio: plano verde, cortado arriba. */
+.includes { position: relative; isolation: isolate; overflow: clip; }
+.includes__plane {
+  position: absolute; inset: 0; z-index: 0;
+  background: var(--c-green);
+  clip-path: polygon(0 var(--diag), 100% 0, 100% 100%, 0 100%);
+}
+.includes__inner { position: relative; z-index: 1; padding-block: calc(var(--section-y) + var(--diag)) var(--section-y); color: var(--c-ink); }
+.includes__grid { display: grid; gap: 0; margin-block-start: var(--s-7); }
+@media (min-width: 40rem) { .includes__grid { grid-template-columns: 1fr 1fr; column-gap: var(--s-8); } }
+@media (min-width: 64rem) { .includes__grid { grid-template-columns: repeat(3, 1fr); } }
+.includes__item { padding-block: var(--s-5); border-block-start: 1px solid rgb(27 25 25 / .22); }
+.includes__term { font-family: var(--ff-display); font-size: var(--fs-h3); letter-spacing: var(--tr-display); }
+.includes__desc { color: rgb(27 25 25 / .74); font-size: var(--fs-sm); margin-block-start: var(--s-1); }
+
+/* Puestos que cubrimos: la seccion que mas debe parecer una pagina del folleto. */
+.positions { background: var(--c-ink); color: var(--c-on-dark); }
+.positions__list { margin-block-start: var(--s-7); }
+@media (min-width: 40rem) { .positions__list { columns: 2; column-gap: var(--s-8); } }
+@media (min-width: 64rem) { .positions__list { columns: 3; } }
+.positions__item {
+  break-inside: avoid;
+  padding-block: var(--s-4);
+  border-block-start: 1px solid rgb(67 181 86 / .38);
+  font-family: var(--ff-display);
+  font-size: var(--fs-h3);
+  letter-spacing: var(--tr-display);
+  line-height: 1.1;
+}
+.positions__note { margin-block-start: var(--s-7); color: var(--c-on-dark-2); }
+
+/* ============================ CONTACTO ==================================== */
+.contact-hero { position: relative; isolation: isolate; overflow: clip; color: var(--c-on-dark); }
+.contact-hero__plane {
+  position: absolute; inset: 0; z-index: 0;
+  background: var(--c-green-deep);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--diag)));
+}
+.contact-hero__inner { position: relative; z-index: 1; padding-block: var(--section-y) calc(var(--section-y) + var(--diag)); }
+
+/* Las fichas cruzan el corte a proposito: son opacas, asi que es seguro. */
+.contact-tiles {
+  position: relative; z-index: 2;
+  display: grid; gap: var(--s-4);
+  margin-block-start: var(--s-8);
+  margin-block-end: calc(var(--section-y) * -0.5);
+}
+@media (min-width: 48rem) { .contact-tiles { grid-template-columns: repeat(3, 1fr); } }
+.contact-tile {
+  display: flex; flex-direction: column; gap: var(--s-2);
+  padding: var(--s-6);
+  background: var(--c-ink);
+  box-shadow: inset 0 3px 0 var(--c-green);
+  text-decoration: none;
+  transition: transform var(--dur-2) var(--ease-out), background-color var(--dur-2) var(--ease-out);
+}
+.contact-tile img { width: 1.75rem; height: 1.75rem; }
+.contact-tile__label { font-size: var(--fs-sm); color: var(--c-on-dark-2); }
+.contact-tile__value { font-family: var(--ff-display); font-size: 1.25rem; letter-spacing: .01em; overflow-wrap: anywhere; }
+a.contact-tile:hover { background: var(--c-ink-2); transform: translateY(-2px); }
+
+.contact-form-section { padding-block: calc(var(--section-y) + var(--s-8)) var(--section-y); }
+.contact-form-section__grid { display: grid; gap: var(--s-8); }
+@media (min-width: 64rem) { .contact-form-section__grid { grid-template-columns: 1fr 1.15fr; gap: var(--s-10); align-items: start; } }
+
+/* ============================ SOLICITUD DE EMPLEO ========================= */
+.apply { padding-block: var(--section-y); }
+.apply__intro { color: var(--c-mute); margin-block-start: var(--s-4); }
+.apply__form { margin-block-start: var(--s-8); display: grid; gap: var(--s-9); }
+
+/* ============================ PIE (gesto conservado) ====================== */
+.footer-cta-band { position: relative; isolation: isolate; overflow: clip; }
+.footer-cta-band__plane {
+  position: absolute; inset: 0; z-index: 0;
+  background: var(--c-green);
+  clip-path: polygon(0 0, 100% var(--diag), 100% 100%, 0 calc(100% - var(--diag)));
+}
+.footer-cta-band__inner {
+  position: relative; z-index: 1;
+  padding-block: calc(var(--section-y) + var(--diag));
+  color: var(--c-ink);
+}
