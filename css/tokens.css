@@ -9,7 +9,7 @@
 
      - El verde de marca es SUPERFICIE, nunca tinta sobre blanco.
        #43b556 sobre blanco = 2,63:1  -> falla AA incluso en tamano grande.
-       #43b556 sobre carbon = 7,12:1  -> vale como texto y como grafico.
+       #43b556 sobre carbon = 6,65:1  -> vale como texto y como grafico.
      - Relleno verde  -> texto carbon (--c-ink). NUNCA texto blanco sobre verde.
      - Verde como texto sobre claro -> solo --c-green-ink (#2f7d3d, 5,09:1).
      - --c-mute solo sobre blanco o --c-paper-2.
@@ -29,7 +29,6 @@
 
 /* Cuerpo. Campton, licencia del cliente, ya local desde el export de Webflow.
    Solo se declaran los dos pesos que se usan: 542 KB -> 219 KB.
-   Los .ttf de Light/Bold/Black siguen en disco pero sin referenciar.
    No hay cursiva en Campton: ver la regla `em, i` en base.css. */
 @font-face {
   font-family: 'Campton';

@@ -15,23 +15,33 @@
 .hero__media::after {
   content: "";
   position: absolute; inset: 0;
-  background: linear-gradient(100deg, rgb(27 25 25 / .80) 0 28%, rgb(27 25 25 / .34) 62%, rgb(27 25 25 / .58));
+  background: linear-gradient(100deg, rgb(27 25 25 / .80) 0 28%, rgb(27 25 25 / .22) 62%, rgb(27 25 25 / .38));
 }
-.hero .plane { --split: 52%; opacity: .93; }
+/* Plano OPACO. Al .93 se transparentaba el techo de la nave y leia como
+   suciedad sobre el plano. Y como el titular (13ch) y el lead (34ch) caben
+   dentro del 52%, el blanco queda garantizado a 8,73:1 pase lo que pase en la
+   foto: por eso el degradado de la derecha puede bajar a .22/.38 y dejar
+   pasar el color de las rosas. */
+.hero .plane { --split: 52%; }
 .hero__inner { padding-block: var(--s-6) calc(var(--section-y) + var(--diag)); }
 
 /* En movil el plano NO tapa la foto entera: la fotografia respira arriba y el
    plano verde entra por debajo con el borde superior en diagonal, que es como
    esta compuesta la portada del folleto. Con el plano a inset:0 y opacidad .93
    el trabajador desaparecia por completo. */
-@media (max-width: 63.99rem) {
+@media not all and (min-width: 64rem) {
   .hero { min-height: 0; }
   .hero .plane { inset: 13rem 0 0 0; opacity: 1; }
   .hero__inner { padding-block-start: 15rem; }
   /* La capa de foto se limita a la banda que queda a la vista. Si ocupa el alto
      entero del hero, object-fit encuadra sobre 729px y por la rendija de 208px
-     solo se ve el techo de la nave, no la gente. */
-  .hero__media { inset: 0 0 auto 0; height: 14rem; }
+     solo se ve el techo de la nave, no la gente.
+     El alto es 13rem + --diag, no 14rem fijo: el borde superior del plano es
+     diagonal y arranca en 13rem + --diag por la izquierda, asi que con 14rem
+     asomaba el blanco del body justo ahi. El hueco era --diag - 1rem: 6,5px a
+     375px, 30px a 768px y 45,4px a 1023px. Atando los dos numeros se cierra a
+     cualquier ancho y de paso se ve mas foto. */
+  .hero__media { inset: 0 0 auto 0; height: calc(13rem + var(--diag)); }
 }
 @media (min-width: 64rem) { .hero__inner { padding-block: var(--s-10) var(--section-y); } }
 .hero__title { font-size: var(--fs-display); line-height: var(--lh-display); max-width: 13ch; }
@@ -62,7 +72,20 @@
 
 /* --- quienes somos (la diagonal insignia) ---------------------------------- */
 .who { color: var(--c-on-dark); }
-.who__media img { object-position: 62% 50%; }
+/* La foto va de fondo, no en un <img>. Por debajo de 64rem la tapa un plano
+   OPACO del que solo escapa un 0,6% de la seccion, y aun asi el navegador se
+   bajaba 85 KB a DPR2 y 188 KB a DPR3 para no ensenar nada. Dentro de la media
+   query no la pide, y assets.test.js si valida los url() de css/. */
+@media (min-width: 64rem) {
+  .who {
+    background-image: image-set(url('../images/who-we-are-1300.jpg') 1x,
+                                url('../images/who-we-are-2000.jpg') 1.5x,
+                                url('../images/who-we-are.jpg') 2x);
+    background-size: cover;
+    background-position: 62% 50%;
+    background-repeat: no-repeat;
+  }
+}
 .who .plane { --split: 58%; }
 .who__inner { padding-block: var(--section-y) calc(var(--section-y) + var(--diag)); }
 .who__body { max-width: 50ch; color: var(--c-on-dark-2); }
@@ -122,6 +145,53 @@
 .page-hero__title { font-size: var(--fs-h1); max-width: 16ch; }
 .page-hero__lead { margin-block-start: var(--s-5); color: var(--c-on-dark-2); max-width: 48ch; }
 
+/* Hero de pagina CON fotografia.
+   Tres decisiones, y las tres son a proposito:
+
+   1. La foto va como background-image, no como <img>. Un <img> con display:none
+      se descarga igual. Dentro de la media query el navegador no la pide
+      siquiera. .who tenia ese mismo desperdicio y se arreglo igual.
+
+   2. El corte es un plano DURO de --c-green-deep, no un degradado que tine la
+      foto entera. Con foto oscura un scrim verde suave valia; con flor de color
+      la volvia verdosa (saturacion 46% contra 58% con el plano duro) y encima se
+      veia la nave fantasmeando bajo el verde, que es el mismo defecto que ya
+      tiene el hero de la home. Asi que se copia lo que SI funciona en .who:
+      plano opaco donde va el texto, foto intacta al otro lado.
+      El corte va al 48%: medido, al 44% el titular cae sobre una zona clara de
+      la foto y baja a 2,44:1. Al 48% el texto queda entero sobre verde macizo,
+      8,73:1 garantizado. Los 96deg reproducen la inclinacion de .plane--split
+      (86,4px sobre 794 = 6,2 grados desde la vertical).
+
+   3. Solo a partir de 64rem. Por debajo el marco de estas secciones es casi
+      cuadrado (0,41 en /contact-us, 0,82 en /services a 375px) y un 16:9 ahi se
+      magnifica hasta lo ilegible. Debajo se queda el plano liso, que ya funciona.
+
+   /services se queda SIN foto a proposito. Se probo un plano de nave desierta y
+   medido no se ve: sigma de luminancia 0,31 en el tercio derecho contra 4,23 del
+   hero de /about-us, y bajando el scrim hasta .72/.18/.32 solo sube a 1,54, punto
+   en el que ya no hay plano de carbon. La imagen era intrinsecamente casi negra.
+   Ademas debajo vienen tres fotos grandes y el carbon liso es lo que las deja
+   respirar. El hueco de esa seccion no es falta de imagen: son 335px de padding
+   alrededor de 320px de contenido. */
+@media (min-width: 64rem) {
+  .page-hero--cold-room {
+    background-image:
+      linear-gradient(96deg, var(--c-green-deep) 0 48%, rgb(42 84 45 / 0) 48.6%),
+      image-set(url('../images/about-hero-1440.jpg') 1x,
+                url('../images/about-hero-2160.jpg') 1.5x,
+                url('../images/about-hero-2880.jpg') 2x);
+  }
+  .page-hero--aisle {
+    background-image:
+      linear-gradient(96deg, var(--c-ink) 0 48%, rgb(27 25 25 / 0) 48.6%),
+      image-set(url('../images/svc-hero-aisle-1440.jpg') 1x,
+                url('../images/svc-hero-aisle-2382.jpg') 1.65x);
+  }
+  .page-hero--cold-room,
+  .page-hero--aisle { background-size: cover; background-position: center; background-repeat: no-repeat; }
+}
+
 /* Fichas de ancla del hero de servicios: ademas de navegar, son la prueba en
    pagina de que scroll-padding-top deja el destino por debajo de la barra. */
 .anchor-chips { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-block-start: var(--s-7); }
@@ -179,8 +249,12 @@
 .mission__body p + p { margin-block-start: var(--s-4); }
 .mission h2, .mission h3 { margin-block-end: var(--s-4); }
 
-/* Divisor grafico: el SVG pasa a ser el relleno de una cuna, no un calco suelto. */
+/* Banda divisoria de /contact-us. Responde "existis de verdad y estais en
+   Doral" sin empujar el formulario: 96-192px de alto, y va DESPUES del hero,
+   antes del formulario. Lleva .photo, asi que recibe el mismo tratamiento
+   fotografico que el resto (saturate .88 y el scrim de 200deg). */
 .divider-graphic { height: clamp(6rem, 14vw, 12rem); background: var(--c-paper-2); }
+.divider-graphic__media { height: 100%; }
 .divider-graphic__media img { object-fit: cover; object-position: 50% 50%; }
 
 /* ============================ SERVICIOS =================================== */
@@ -226,6 +300,10 @@
 
 /* Las fichas cruzan el corte a proposito: son opacas, asi que ahi el solape es seguro. */
 .contact-tiles { display: grid; gap: var(--s-4); margin-block-start: var(--s-8); }
+/* El <li> ya estiraba, pero la ficha es el <a> de dentro y se quedaba a su alto:
+   con el email partido en dos lineas su ficha era mas alta que las otras dos. */
+.contact-tiles > li { display: flex; }
+.contact-tiles > li > .contact-tile { flex: 1; }
 @media (min-width: 48rem) { .contact-tiles { grid-template-columns: repeat(3, 1fr); } }
 .contact-tile {
   display: flex; flex-direction: column; gap: var(--s-2);

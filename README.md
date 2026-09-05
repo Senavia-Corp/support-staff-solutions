@@ -144,8 +144,18 @@ Del despliegue:
 
 Del cliente, para cerrar el diseño:
 
-5. **Logos de clientes** para la franja de marcas. Hasta que lleguen se ven marcadores.
-6. **Retrato de Alejandro Amado a 1200px.** El actual son 210×320 y no se puede ampliar.
+5. **Dos activos de marca de cliente.** La franja ya lleva los seis logos reales;
+   faltan (a) **The Elite Flower**, cuyo unico SVG disponible es la version toda
+   blanca e invisible sobre la franja: hace falta la variante morada, y con siete
+   logos hay que revisar el reparto porque la rejilla es de 2/3/6 columnas; y
+   (b) un **PNG con alfa a >=360px de ancho para Miami Agro Import**, que hoy es
+   JPEG sin canal alfa y solo se disimula porque la franja va sobre blanco puro.
+6. **Foto real de Alejandro Amado.** El 210×320 original se escaló con `topaz_image`
+   (`face_enhancement` en `false`, para no inventarle un solo rasgo) a
+   `alejandro-amado-576.jpg` + `-384.jpg`, que es lo que de verdad consume el layout:
+   el avatar es un círculo fijo de 192px, así que 384 cubre 2× y 576 cubre 3×. Los
+   1200px que pedía esta lista excedían el render. Sigue siendo un recorte con flash
+   duro y fondo indefinido: una foto suya de verdad sigue mejorando la página.
 7. **Confirmar la frase de misión** de `/about-us`, redactada a partir de su propio
    vocabulario porque el titular decía "Our Mission" y el cuerpo describía la visión.
 

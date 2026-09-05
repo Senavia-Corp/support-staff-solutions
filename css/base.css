@@ -87,7 +87,6 @@ a:where(:not([class])) {
 }
 .u-prose { max-width: var(--w-prose); }
 .u-section { padding-block: var(--section-y); }
-.u-stack > * + * { margin-block-start: var(--flow, var(--s-5)); }
 
 /* ============================================================================
    La diagonal. UNA primitiva, UN angulo en todo el sitio.
@@ -117,10 +116,8 @@ a:where(:not([class])) {
 
 /* Los cuatro cortes horizontales + la banda. Mismo angulo en todos. */
 .plane--bottom-r { --plane-shape: polygon(0 0, 100% 0, 100% calc(100% - var(--diag)), 0 100%); }
-.plane--bottom-l { --plane-shape: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--diag))); }
 .plane--top-r    { --plane-shape: polygon(0 var(--diag), 100% 0, 100% 100%, 0 100%); }
 .plane--top-l    { --plane-shape: polygon(0 0, 100% var(--diag), 100% 100%, 0 100%); }
-.plane--band     { --plane-shape: polygon(0 0, 100% var(--diag), 100% 100%, 0 calc(100% - var(--diag))); }
 
 /* Las dos cunas complementarias de --band. Se usan cuando el TEXTO va encima del
    plano: asi el color de fondo real lo lleva la seccion y las cunas solo recortan
@@ -160,11 +157,7 @@ a:where(:not([class])) {
   background: linear-gradient(200deg, rgb(27 25 25 / .38), rgb(67 181 86 / .10) 58%, transparent);
   pointer-events: none;
 }
-.photo--plain::after { display: none; }
 
 /* Superficies oscuras: un solo sitio donde se define el texto sobre oscuro. */
 .u-on-dark { background: var(--c-ink); color: var(--c-on-dark); }
 .u-on-dark p { color: var(--c-on-dark-2); }
-.u-on-green { background: var(--c-green); color: var(--c-ink); }
-.u-on-deep  { background: var(--c-green-deep); color: var(--c-on-dark); }
-.u-on-deep p { color: var(--c-on-dark-2); }

@@ -79,3 +79,25 @@ test('los unicos terceros que sirven assets son los esperados', () => {
   }
   assert.deepStrictEqual([...hosts].sort(), EXTERNOS_OK.slice().sort())
 })
+
+// srcset no lo miraba nadie. El regex de refs() pide el literal `src="`, y en
+// `srcset="` tras src viene set=, asi que las candidatas de las 11 srcset del
+// sitio no pasaban por el gate: un nombre de variante mal escrito se desplegaba
+// en silencio, sin 404 visible y sin fallar ningun test.
+test('cada candidata de cada srcset existe en disco', () => {
+  const rotas = []
+  let candidatas = 0
+  for (const file of html) {
+    const s = fs.readFileSync(path.join(ROOT, file), 'utf8')
+    for (const m of s.matchAll(/srcset="([^"]+)"/g)) {
+      for (const parte of m[1].split(',')) {
+        const url = parte.trim().split(/\s+/)[0]
+        if (!url) continue
+        candidatas++
+        if (!fs.existsSync(path.join(ROOT, url.split(/[?#]/)[0]))) rotas.push(`${file} -> ${url}`)
+      }
+    }
+  }
+  assert.ok(candidatas > 0, 'no se ha parseado ninguna srcset: el gate no ha corrido')
+  assert.deepStrictEqual(rotas, [], `Candidatas de srcset rotas:\n${rotas.join('\n')}`)
+})

@@ -108,21 +108,33 @@
       })
     }
 
+    // Las flechas se deciden por posicion de scroll, no por indice: a >=64rem se
+    // ven tres tarjetas a la vez, asi que 'active === slides.length - 1' nunca se
+    // cumplia y 'next' no se deshabilitaba jamas.
+    const atStart = () => track.scrollLeft <= 2
+    const atEnd = () => track.scrollLeft + track.clientWidth >= track.scrollWidth - 2
+
     const paint = () => {
       dots?.querySelectorAll('button').forEach((d, i) => d.setAttribute('aria-current', String(i === active)))
-      prev?.toggleAttribute('disabled', active === 0)
-      next?.toggleAttribute('disabled', active === slides.length - 1)
+      prev?.toggleAttribute('disabled', atStart())
+      next?.toggleAttribute('disabled', atEnd())
     }
 
     // Un observer sobre la pista mantiene puntos y flechas sincronizados
     // tambien cuando el usuario arrastra en lugar de pulsar.
+    // Se queda con la PRIMERA visible. Quedandose con la ultima entrada del
+    // bucle, y viendose tres tarjetas a la vez en escritorio, en la posicion 0 se
+    // encendia el punto 3 y prev quedaba habilitado apuntando a una ya visible.
     if ('IntersectionObserver' in window) {
+      const visible = new Set()
       const spy = new IntersectionObserver((entries) => {
-        for (const e of entries) if (e.isIntersecting) active = slides.indexOf(e.target)
+        for (const e of entries) e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)
+        if (visible.size) active = Math.min(...[...visible].map((s) => slides.indexOf(s)))
         paint()
       }, { root: track, threshold: 0.6 })
       slides.forEach((s) => spy.observe(s))
     }
+    track.addEventListener('scroll', paint, { passive: true })
 
     paint()
   })
