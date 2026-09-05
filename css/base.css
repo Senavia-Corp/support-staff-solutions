@@ -1,0 +1,161 @@
+/* ============================================================================
+   Base: reset, elementos, tipografia, primitivas de maquetacion.
+   Sustituye a normalize.css y a la parte generica de webflow.css.
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--c-paper);
+  color: var(--c-ink);
+  font-family: var(--ff-body);
+  font-weight: 500;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, p, figure, blockquote, dl, dd, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+
+img, picture, svg, video { display: block; max-width: 100%; }
+img { height: auto; }
+
+input, button, textarea, select { font: inherit; color: inherit; }
+button { background: none; border: 0; padding: 0; cursor: pointer; }
+
+/* Campton no tiene cursivas: sin esto el navegador sintetiza una oblicua fea.
+   El enfasis se hace con peso, no con inclinacion. */
+em, i { font-style: normal; font-weight: 600; }
+
+strong, b { font-weight: 600; }
+
+/* --- titulares ------------------------------------------------------------ */
+h1, h2, h3, .u-display {
+  font-family: var(--ff-display);
+  font-weight: 400;
+  line-height: var(--lh-head);
+  letter-spacing: var(--tr-display);
+  text-wrap: balance;
+}
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+.u-display { font-size: var(--fs-display); line-height: var(--lh-display); }
+.u-lead    { font-size: var(--fs-lead); line-height: var(--lh-lead); max-width: 46ch; }
+
+p { text-wrap: pretty; }
+
+a { color: inherit; }
+a:where(:not([class])) {
+  color: var(--c-green-ink);
+  text-underline-offset: .18em;
+  text-decoration-thickness: from-font;
+}
+
+/* --- foco: un solo anillo, visible sobre claro y sobre oscuro -------------- */
+:focus-visible {
+  outline: var(--focus-w) solid var(--c-green);
+  outline-offset: 2px;
+  border-radius: var(--r-1);
+}
+.u-on-dark :focus-visible { outline-color: var(--c-green); }
+
+/* --- utilidades ----------------------------------------------------------- */
+.u-visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+.u-skip {
+  position: absolute; inset-inline-start: var(--s-4); inset-block-start: -100%;
+  z-index: 100; background: var(--c-ink); color: var(--c-on-dark);
+  padding: var(--s-3) var(--s-5); border-radius: var(--r-2);
+}
+.u-skip:focus { inset-block-start: var(--s-3); }
+
+/* --- maquetacion ---------------------------------------------------------- */
+.u-page {
+  width: min(100% - var(--gutter) * 2, var(--w-page));
+  margin-inline: auto;
+}
+.u-prose { max-width: var(--w-prose); }
+.u-section { padding-block: var(--section-y); }
+.u-stack > * + * { margin-block-start: var(--flow, var(--s-5)); }
+
+/* ============================================================================
+   La diagonal. UNA primitiva, UN angulo en todo el sitio.
+
+   Reglas, y no son negociables:
+     1. La diagonal nunca va sobre el elemento que contiene texto: solo sobre
+        ::before o sobre .diag-media.
+     2. El contenido vive en `.diag > *` a z-index 1, con --diag-pad de holgura
+        por el lado cortado.
+     3. Una diagonal por altura de pantalla, como maximo.
+     4. clip-path crea bloque contenedor para descendientes position:fixed.
+        Nada fijo puede vivir dentro de un .diag. La cabecera es hermana de las
+        secciones, asi que se cumple por estructura.
+   ========================================================================== */
+.diag {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;            /* clip, no hidden: no crea contenedor de scroll */
+}
+.diag > * { position: relative; z-index: 1; }
+
+.diag::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--diag-fill, var(--c-ink));
+  clip-path: var(--diag-shape);
+}
+
+.diag--bottom-r { --diag-shape: polygon(0 0, 100% 0, 100% calc(100% - var(--diag)), 0 100%); }
+.diag--bottom-l { --diag-shape: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--diag))); }
+.diag--top-r    { --diag-shape: polygon(0 var(--diag), 100% 0, 100% 100%, 0 100%); }
+.diag--top-l    { --diag-shape: polygon(0 0, 100% var(--diag), 100% 100%, 0 100%); }
+.diag--band     { --diag-shape: polygon(0 0, 100% var(--diag), 100% 100%, 0 calc(100% - var(--diag))); }
+
+/* Zona de exclusion del texto, por el lado que va cortado. */
+.diag--bottom-r > *, .diag--bottom-l > * { padding-block-end: var(--diag-pad); }
+.diag--top-r    > *, .diag--top-l    > * { padding-block-start: var(--diag-pad); }
+.diag--band     > *                      { padding-block: var(--diag-pad); }
+
+/* Cuando la diagonal corta una FOTO en vez de un color plano. */
+.diag--photo::before { display: none; }
+.diag-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  clip-path: var(--diag-shape);
+}
+.diag-media img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ============================================================================
+   Tratamiento fotografico. Va en CSS, no horneado en los JPEG: se ajusta en una
+   linea y se aplica igual a las fotos que mande el cliente despues.
+   Sombras hacia el carbon + 10% de verde en medios tonos = el look del folleto.
+   Tope de 2 imagenes filtradas por pantalla (filter fuerza capa de composicion).
+   ========================================================================== */
+.photo { position: relative; overflow: clip; }
+.photo img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.88) contrast(1.04); }
+.photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(200deg, rgb(27 25 25 / .38), rgb(67 181 86 / .10) 58%, transparent);
+  pointer-events: none;
+}
+.photo--plain::after { display: none; }
+
+/* Superficies oscuras: un solo sitio donde se define el texto sobre oscuro. */
+.u-on-dark { background: var(--c-ink); color: var(--c-on-dark); }
+.u-on-dark p { color: var(--c-on-dark-2); }
+.u-on-green { background: var(--c-green); color: var(--c-ink); }
+.u-on-deep  { background: var(--c-green-deep); color: var(--c-on-dark); }
+.u-on-deep p { color: var(--c-on-dark-2); }

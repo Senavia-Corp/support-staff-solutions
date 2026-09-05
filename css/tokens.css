@@ -1,0 +1,138 @@
+/* ============================================================================
+   Support Staff Solutions — tokens del sistema
+   ----------------------------------------------------------------------------
+   La direccion visual sale del folleto de marca, no de una plantilla: cortes
+   diagonales entre verde, verde profundo, carbon y fotografia. Los tres valores
+   de color estan muestreados del propio folleto (ver comentarios).
+
+   REGLAS DE CONTRASTE — si no estan escritas aqui, se incumplen:
+
+     - El verde de marca es SUPERFICIE, nunca tinta sobre blanco.
+       #43b556 sobre blanco = 2,63:1  -> falla AA incluso en tamano grande.
+       #43b556 sobre carbon = 7,12:1  -> vale como texto y como grafico.
+     - Relleno verde  -> texto carbon (--c-ink). NUNCA texto blanco sobre verde.
+     - Verde como texto sobre claro -> solo --c-green-ink (#2f7d3d, 5,09:1).
+     - --c-mute solo sobre blanco o --c-paper-2.
+
+   El sitio es predominantemente BLANCO. El verde y el carbon son planos por los
+   que se pasa, no el fondo por defecto.
+   ========================================================================== */
+
+/* Titulares. Anton, subconjunto latino, 12 KB. SIL OFL 1.1, auto-alojada. */
+@font-face {
+  font-family: 'Anton';
+  src: url('../fonts/Anton-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Cuerpo. Campton, licencia del cliente, ya local desde el export de Webflow.
+   Solo se declaran los dos pesos que se usan: 542 KB -> 219 KB.
+   Los .ttf de Light/Bold/Black siguen en disco pero sin referenciar.
+   No hay cursiva en Campton: ver la regla `em, i` en base.css. */
+@font-face {
+  font-family: 'Campton';
+  src: url('../fonts/Campton-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Campton';
+  src: url('../fonts/Campton-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* ---- color -------------------------------------------------------------
+     --c-green      canonico: los 8 SVG de iconos estan autorizados en #43B556
+     --c-green-deep muestreado del plano verde del folleto (pag. 1, 110,200)
+     --c-ink        muestreado de la cuna carbon del folleto (pag. 1, 260,560)
+                    es CALIDO (R>G=B), no un negro azulado
+     ---------------------------------------------------------------------- */
+  --c-green:       #43b556;
+  --c-green-deep:  #2a542d;
+  --c-green-ink:   #2f7d3d;
+  --c-green-press: #37984a;
+  --c-ink:         #1b1919;
+  --c-ink-2:       #2b2727;
+  --c-mute:        #5c6167;
+  --c-line:        #e0e4e0;
+  --c-paper:       #ffffff;
+  --c-paper-2:     #eff2ee;
+  --c-on-dark:     #ffffff;
+  --c-on-dark-2:   rgb(255 255 255 / .76);
+  --c-danger:      #b3261e;
+
+  /* ---- tipografia -------------------------------------------------------- */
+  --ff-display: 'Anton', 'Arial Narrow', 'Helvetica Neue Condensed', sans-serif;
+  --ff-body:    'Campton', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Fluidas de 375 a 1440. Todas conservan un termino en rem para que el zoom
+     del navegador siga funcionando (WCAG 1.4.4). */
+  --fs-display: clamp(2.75rem,  1.43rem + 5.63vw, 6.5rem);    /*  44 -> 104 */
+  --fs-h1:      clamp(2.125rem, 1.38rem + 3.19vw, 4.25rem);   /*  34 ->  68 */
+  --fs-h2:      clamp(1.6875rem,1.31rem + 1.60vw, 2.75rem);   /*  27 ->  44 */
+  --fs-h3:      clamp(1.3125rem,1.16rem + 0.66vw, 1.75rem);   /*  21 ->  28 */
+  --fs-lead:    clamp(1.125rem, 1.04rem + 0.38vw, 1.375rem);  /*  18 ->  22 */
+  --fs-body:    clamp(1rem,     0.97rem + 0.14vw, 1.09rem);   /*  16 -> 17.5*/
+  --fs-sm:      0.9375rem;
+  --fs-xs:      0.8125rem;
+
+  --lh-display: 0.92;   /* Anton pide interlineado corto o lee como una lista */
+  --lh-head:    1.04;
+  --lh-body:    1.6;
+  --lh-lead:    1.45;
+  --tr-display: -0.015em;
+
+  /* ---- espacio: base 4px ------------------------------------------------- */
+  --s-1: .25rem;  --s-2: .5rem;  --s-3: .75rem; --s-4: 1rem;  --s-5: 1.5rem;
+  --s-6: 2rem;    --s-7: 3rem;   --s-8: 4rem;   --s-9: 6rem;  --s-10: 8rem;
+  --section-y: clamp(3.5rem, 2rem + 6.4vw, 9rem);      /*  56 -> 144 */
+  --gutter:    clamp(1.25rem, .6rem + 2.8vw, 2.5rem);
+  --w-page:    75rem;    /* 1200 */
+  --w-prose:   62ch;
+
+  /* ---- forma: la marca es angular, los radios van casi a cero ------------ */
+  --r-1: 2px;
+  --r-2: 4px;   /* solo botones y campos, para que sigan leyendose controles */
+
+  /* ---- elevacion: una sombra y un anillo. Mas pelea con lo plano --------- */
+  --shadow-1: 0 1px 2px rgb(27 25 25 / .06), 0 10px 28px -14px rgb(27 25 25 / .22);
+  --focus-w:  3px;
+
+  /* ---- movimiento -------------------------------------------------------- */
+  --dur-1: 120ms; --dur-2: 220ms; --dur-3: 560ms;
+  --ease-out: cubic-bezier(.22,.61,.36,1);
+
+  /* ---- la diagonal -------------------------------------------------------
+     6% del ancho de viewport => atan(.06) = 3,43 GRADOS CONSTANTES a cualquier
+     ancho. Es lo que clip-path NO puede expresar con porcentajes, porque los %
+     se resuelven por eje contra la caja: el sitio antiguo iba de 3,6 grados a
+     1440px hasta 16,9 grados a 375px, y por eso aplanaba la diagonal en movil.
+     El clamp evita que desaparezca bajo 340px o se coma 180px a 2560px.
+     ---------------------------------------------------------------------- */
+  --diag:     clamp(1.25rem, 6vw, 6.5rem);
+  --diag-pad: calc(var(--diag) + var(--s-6));
+
+  /* ---- cabecera ----------------------------------------------------------
+     Altura CONSTANTE a proposito. El shrink 100->65px del sitio antiguo movia
+     el layout y desincronizaba scroll-padding-top justo cuando aterrizaba un
+     ancla: 90,7px del titular quedaban bajo la barra. Atando las dos cosas al
+     mismo token, el ancla cae bien por construccion.
+     ---------------------------------------------------------------------- */
+  --header-h: 4rem;
+
+  scroll-padding-top: calc(var(--header-h) + var(--s-4));
+}
+
+@media (min-width: 64rem) {
+  :root { --header-h: 4.75rem; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root { scroll-behavior: smooth; }
+}
