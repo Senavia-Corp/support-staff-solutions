@@ -113,6 +113,7 @@ a:where(:not([class])) {
 .plane--green { --plane-fill: var(--c-green); }
 .plane--deep  { --plane-fill: var(--c-green-deep); }
 .plane--ink   { --plane-fill: var(--c-ink); }
+.plane--paper { --plane-fill: var(--c-paper); }
 
 /* Los cuatro cortes horizontales + la banda. Mismo angulo en todos. */
 .plane--bottom-r { --plane-shape: polygon(0 0, 100% 0, 100% calc(100% - var(--diag)), 0 100%); }
@@ -120,6 +121,16 @@ a:where(:not([class])) {
 .plane--top-r    { --plane-shape: polygon(0 var(--diag), 100% 0, 100% 100%, 0 100%); }
 .plane--top-l    { --plane-shape: polygon(0 0, 100% var(--diag), 100% 100%, 0 100%); }
 .plane--band     { --plane-shape: polygon(0 0, 100% var(--diag), 100% 100%, 0 calc(100% - var(--diag))); }
+
+/* Las dos cunas complementarias de --band. Se usan cuando el TEXTO va encima del
+   plano: asi el color de fondo real lo lleva la seccion y las cunas solo recortan
+   las esquinas. Con el plano al reves, el ancestro del texto es del color
+   equivocado, y eso no es solo cosmetico: cualquier auditor de contraste lee el
+   fondo por los ancestros, y si el plano no llegara a pintar el texto quedaria
+   oscuro sobre oscuro. */
+.plane--wedge-br { --plane-shape: polygon(0 100%, 100% calc(100% - var(--diag)), 100% 100%); }
+.plane--wedge-tr { --plane-shape: polygon(0 0, 100% 0, 100% var(--diag)); }
+.plane--wedge-bl { --plane-shape: polygon(0 calc(100% - var(--diag)), 0 100%, 100% 100%); }
 
 /* El corte casi vertical del reparto a dos planos. Solo existe en escritorio:
    por debajo de 64rem los planos se apilan y el corte vuelve a ser horizontal. */

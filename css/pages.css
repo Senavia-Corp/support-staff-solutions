@@ -116,7 +116,8 @@
 .quotes__head { max-width: 48ch; margin-block-end: var(--s-8); }
 
 /* ============================ CABECERA DE PAGINA INTERIOR ================= */
-.page-hero { color: var(--c-on-dark); }
+.page-hero { background: var(--c-green-deep); color: var(--c-on-dark); }
+.page-hero--ink { background: var(--c-ink); }
 .page-hero__inner { padding-block: var(--section-y) calc(var(--section-y) + var(--diag)); }
 .page-hero__title { font-size: var(--fs-h1); max-width: 16ch; }
 .page-hero__lead { margin-block-start: var(--s-5); color: var(--c-on-dark-2); max-width: 48ch; }
@@ -220,7 +221,7 @@
 .positions__note { margin-block-start: var(--s-7); color: var(--c-on-dark-2); }
 
 /* ============================ CONTACTO ==================================== */
-.contact-hero { color: var(--c-on-dark); }
+.contact-hero { background: var(--c-green-deep); color: var(--c-on-dark); }
 .contact-hero__inner { padding-block: var(--section-y) calc(var(--section-y) + var(--diag)); }
 
 /* Las fichas cruzan el corte a proposito: son opacas, asi que ahi el solape es seguro. */
@@ -249,6 +250,7 @@ a.contact-tile:hover { background: var(--c-ink-2); transform: translateY(-2px); 
 .apply__form { margin-block-start: var(--s-8); display: grid; gap: var(--s-9); }
 
 /* ============================ PIE (gesto conservado) ====================== */
+.footer-cta-band { background: var(--c-green); }
 .footer-cta-band__inner { padding-block: calc(var(--section-y) * .78 + var(--diag)); color: var(--c-ink); text-align: center; }
 
 /* --- piezas nombradas que antes eran estilos en linea ---------------------- */
@@ -260,6 +262,7 @@ a.contact-tile:hover { background: var(--c-ink-2); transform: translateY(-2px); 
 .process__media { margin-block-start: var(--s-7); }
 
 /* --- franja de cifras (sustituye al divisor decorativo de plantilla) ------- */
+.facts { background: var(--c-ink); }
 .facts__inner { padding-block: calc(var(--section-y) * .6 + var(--diag)); color: var(--c-on-dark); }
 .facts__grid { display: grid; gap: var(--s-6); }
 @media (min-width: 40rem) { .facts__grid { grid-template-columns: repeat(3, 1fr); gap: var(--s-8); } }

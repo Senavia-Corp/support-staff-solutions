@@ -263,19 +263,51 @@
 .quotes__dot[aria-current="true"]::before { background: var(--c-green); transform: scale(1.4); }
 
 /* -------------------------------------------------------------- logos cliente
-   Se monta con marcadores hasta que el cliente envie los logos reales. */
-.logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--s-6) var(--s-8); }
-.logos__item { min-height: 2.75rem; display: grid; place-items: center; }
-.logos__item a { display: grid; place-items: center; min-height: 2.75rem; padding-inline: var(--s-2); }
-.logos__item img { max-height: 2.5rem; width: auto; filter: grayscale(1); opacity: .62; transition: opacity var(--dur-2) var(--ease-out), filter var(--dur-2) var(--ease-out); }
-.logos__item:hover img { filter: none; opacity: 1; }
-.logos__placeholder {
-  height: 2.5rem; min-width: 8rem;
-  display: grid; place-items: center;
-  color: var(--c-mute); font-size: var(--fs-xs);
-  box-shadow: inset 0 0 0 1px var(--c-line);
-  border-radius: var(--r-1);
+   Siete marcas ajenas con proporciones muy dispares: 931x304, 122x200 vertical,
+   300x90, 600x300, 403x91, 180x96 y 300x51. Una fila de altura fija haria que el
+   vertical se viera diminuto y el apaisado dominara, asi que cada logo lleva un
+   factor optico --s propio: no se escala por pixeles, se iguala por peso visual.
+
+   Nunca se deforman: max-width y max-height con width/height en auto, que es lo
+   que hace object-fit: contain sin necesidad de recortar nada.
+
+   OJO: logo-servientrega.png lleva un rectangulo BLANCO OPACO dentro. Se disimula
+   porque esta franja va sobre --c-paper (#ffffff) puro. Si alguna vez se mueve a
+   --c-paper-2 o a un plano de color, apareceria la caja blanca.
+
+   Son marcas de terceros: ni se recolorean ni se les aplica el verde de SSS.
+   El gris de reposo es una atenuacion, no un tinte.
+   -------------------------------------------------------------------------- */
+/* Flex y no grid: con 7 logos una rejilla deja siempre un huerfano alineado a
+   la izquierda (6+1 a 1200px). En flex, la ultima fila se centra sola. */
+.logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--s-6);
+  margin-block-start: var(--s-7);
 }
+.logos__item {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 9rem;
+  min-height: 3.5rem;
+}
+.logos__item img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(3.5rem * var(--s, 1));
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: .66;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .logos__item img { transition: opacity var(--dur-2) var(--ease-out), filter var(--dur-2) var(--ease-out); }
+}
+.logos__item:hover img, .logos__item:focus-within img { filter: none; opacity: 1; }
 
 /* ------------------------------------------------------------------ formularios */
 .field { display: flex; flex-direction: column; gap: var(--s-2); }
