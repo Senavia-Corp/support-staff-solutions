@@ -11,8 +11,22 @@
   border-block-end: 1px solid rgb(255 255 255 / .10);
   color: var(--c-on-dark);
 }
+/* OJO: el blur va en el pseudo-elemento, NO en .site-header. Un
+   backdrop-filter distinto de none crea bloque contenedor para los
+   descendientes position:fixed, y el panel del menu movil es hijo de esta
+   cabecera: con el filtro aqui, su "inset: var(--header-h) 0 0" se resolvia
+   contra los 65px de la cabecera en vez de contra el viewport y el panel salia
+   de 144px (solo padding) con 448px de contenido desbordando. */
 @supports (backdrop-filter: blur(1px)) {
-  .site-header { background: rgb(27 25 25 / .86); backdrop-filter: blur(10px); }
+  .site-header { background: transparent; }
+  .site-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgb(27 25 25 / .86);
+    backdrop-filter: blur(10px);
+  }
 }
 .site-header__inner {
   display: flex;
@@ -34,6 +48,13 @@
    nunca depende de JavaScript para ser alcanzable.
    -------------------------------------------------------------------------- */
 .nav-toggle { display: none; }
+
+/* El <nav> se sirve con `hidden` puesto para que en movil no haya destello de
+   menu abierto: html.js se pone en la cabecera, pero site.js va 21 KB de HTML
+   mas abajo, y en esa ventana el panel a pantalla completa se pintaba encima de
+   la pagina. Sin JavaScript no hay quien lo quite, asi que aqui se devuelve:
+   la navegacion sigue siendo alcanzable con JS desactivado. */
+html:not(.js) .site-nav[hidden] { display: block; }
 
 .site-nav__list {
   display: flex;
@@ -106,6 +127,14 @@
   html.js .site-nav__link[aria-current="page"] { box-shadow: none; color: var(--c-green); }
   html.js .site-nav__cta { margin-block-start: var(--s-6); justify-content: center; }
   html:has(.site-nav:not([hidden])) { overflow: hidden; }   /* no scroll detras */
+
+  /* Movil apaisado: el panel se queda en 311px de alto y con el relleno de
+     vertical (48 + 96) casi la mitad era aire, con el CTA fuera de vista. */
+  @media (max-height: 30rem) {
+    html.js .site-nav { padding-block: var(--s-4) var(--s-5); }
+    html.js .site-nav__link { min-height: 3rem; }
+    html.js .site-nav__cta { margin-block-start: var(--s-4); }
+  }
 }
 
 /* ----------------------------------------------------------------- botones */

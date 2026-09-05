@@ -24,6 +24,9 @@
     const desktop = matchMedia('(min-width: 64rem)')
     let open = false
 
+    // Mientras el panel cubre la pagina, lo de detras se marca inerte: sin el,
+    // VoiceOver se pasea por el contenido tapado al barrer con el dedo.
+    const detras = [document.querySelector('.site-main'), document.querySelector('.site-footer')]
     const setOpen = (next) => {
       open = next
       btn.setAttribute('aria-expanded', String(open))
@@ -33,6 +36,7 @@
       } else {
         panel.setAttribute('hidden', '')
       }
+      for (const el of detras) if (el) el.inert = open && !desktop.matches
     }
 
     // En escritorio el panel no es un overlay: siempre visible y sin estado.
@@ -44,6 +48,9 @@
       } else if (!open) {
         panel.setAttribute('hidden', '')
       }
+      // Cruzar a escritorio con el panel abierto pasa por aqui, no por setOpen:
+      // sin esta linea el inert se quedaria puesto y la pagina, muerta.
+      for (const el of detras) if (el) el.inert = open && !desktop.matches
     }
 
     btn.addEventListener('click', () => setOpen(!open))
