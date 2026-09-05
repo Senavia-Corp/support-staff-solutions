@@ -271,28 +271,37 @@
    Nunca se deforman: max-width y max-height con width/height en auto, que es lo
    que hace object-fit: contain sin necesidad de recortar nada.
 
-   OJO: logo-servientrega.png lleva un rectangulo BLANCO OPACO dentro. Se disimula
-   porque esta franja va sobre --c-paper (#ffffff) puro. Si alguna vez se mueve a
-   --c-paper-2 o a un plano de color, apareceria la caja blanca.
+   OJO, DOS logos traen fondo BLANCO OPACO y solo se disimulan porque esta franja
+   va sobre --c-paper (#ffffff) PURO. Si se mueve a --c-paper-2 o a un plano de
+   color, aparecen las dos cajas:
+     - logo-servientrega.png    25,3% de pixeles blancos opacos
+     - logo-miami-agro-import.jpg  es JPEG: 100% opaco, sin canal alfa, y ademas
+       el 13,7% de sus pixeles de borde se desvia hasta 24/255 del blanco, un
+       halo de compresion que al 66% de opacidad deja ~16/255 y ya se nota sobre
+       blanco. Pedir a la marca un PNG con alfa a >=360px de ancho.
+   (Bouquet Collection parece tener caja, pero es su propio marco: 0% opaco.)
 
    Son marcas de terceros: ni se recolorean ni se les aplica el verde de SSS.
    El gris de reposo es una atenuacion, no un tinte.
    -------------------------------------------------------------------------- */
-/* Flex y no grid: con 7 logos una rejilla deja siempre un huerfano alineado a
-   la izquierda (6+1 a 1200px). En flex, la ultima fila se centra sola. */
+/* Rejilla de 2 / 3 / 6 columnas. Son SEIS logos y seis se divide por los tres
+   numeros, asi que no queda huerfano a ningun ancho. Con flex y ancho fijo si
+   quedaba: entre ~928 y ~1100px de viewport la fila rompia 5+1, porque seis
+   items de 9rem mas cinco huecos piden 1024px y ahi no caben. Flex centraba el
+   huerfano, que no es lo mismo que evitarlo.
+   Si se anade el septimo logo, 7 no divide por 2, 3 ni 6: hay que revisarlo. */
 .logos {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--s-6);
+  align-items: center;
   margin-block-start: var(--s-7);
 }
+@media (min-width: 34rem) { .logos { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 69rem) { .logos { grid-template-columns: repeat(6, 1fr); } }
 .logos__item {
-  flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 9rem;
   min-height: 3.5rem;
 }
 .logos__item img {
