@@ -78,22 +78,22 @@
 
 /* --- quienes somos (la diagonal insignia) ---------------------------------- */
 .who { color: var(--c-on-dark); }
-/* La foto va de fondo, no en un <img>. Por debajo de 64rem la tapa un plano
-   OPACO del que solo escapa un 0,6% de la seccion, y aun asi el navegador se
-   bajaba 85 KB a DPR2 y 188 KB a DPR3 para no ensenar nada. Dentro de la media
-   query no la pide, y assets.test.js si valida los url() de css/. */
-@media (min-width: 64rem) {
-  .who {
-    background-image: image-set(url('../images/who-we-are-1300.jpg') 1x,
-                                url('../images/who-we-are-2000.jpg') 1.5x,
-                                url('../images/who-we-are.jpg') 2x);
-    background-size: cover;
-    background-position: 62% 50%;
-    background-repeat: no-repeat;
-  }
-}
-.who .plane { --split: 58%; }
+/* La foto DEJA de ir de fondo bajo el plano. El reparto a dos planos —plano
+   opaco al 58% y foto asomando por la derecha— esta pensado para una imagen con
+   UN sujeto pesado a la derecha, que es como funcionaba who-we-are. Un retrato
+   de grupo en fila es la forma contraria: el grupo de seis mide 2.670px sobre un
+   original de 5.184, asi que para caber entero en el 42% libre haria falta un
+   encuadre de 6.357px. Y la diagonal empeora el corte: --diag son 86px a 1440,
+   un 6% del ancho, y para no partir a nadie haria falta ese hueco entre dos
+   personas. No hay recorte que lo arregle: lo que cambia es la composicion.
+   Ahora el texto vive en su columna sobre verde macizo (8,73:1 garantizado, sin
+   depender de ningun cap de ch) y la foto en la suya, en 16/9, que es su
+   proporcion nativa: 0% de recorte y el equipo entero a cualquier ancho. */
 .who__inner { padding-block: var(--section-y) var(--diag-pad); }
+.who__grid { display: grid; gap: var(--s-7); }
+.who__media { aspect-ratio: 16 / 9; }
+/* En movil la foto abre la seccion, como el hero de la home. */
+@media not all and (min-width: 64rem) { .who__media { order: -1; } }
 .who__body { max-width: 50ch; color: var(--c-on-dark-2); }
 .who__body p + p { margin-block-start: var(--s-4); }
 .who__pull {
@@ -108,8 +108,7 @@
   max-width: 28ch;
 }
 @media (min-width: 64rem) {
-  .who__inner { padding-block: var(--section-y); }
-  .who__grid { display: grid; grid-template-columns: 50% 1fr; }
+  .who__grid { grid-template-columns: 1fr 1.25fr; gap: var(--s-9); align-items: center; }
   .who__body { max-width: 40ch; }
 }
 
@@ -156,6 +155,20 @@
    peor punto sube a 10,45:1 y 5,85:1. */
 .page-hero__lead { margin-block-start: var(--s-5); color: var(--c-on-dark-2); max-width: 34ch; }
 
+/* El hero de /about-us pasa a dos columnas por el mismo motivo que .who: su foto
+   es un retrato de grupo que ocupa el ancho entero del original y no cabe en el
+   49% que dejaba libre el corte del 48%. Aqui el texto ya no compite con nada. */
+.page-hero__media { aspect-ratio: 16 / 9; }
+@media not all and (min-width: 64rem) { .page-hero__media { order: -1; } }
+@media (min-width: 64rem) {
+  .page-hero--cold-room .page-hero__inner {
+    display: grid; grid-template-columns: 1fr 1.25fr; gap: var(--s-9); align-items: center;
+  }
+}
+@media not all and (min-width: 64rem) {
+  .page-hero--cold-room .page-hero__inner { display: grid; gap: var(--s-7); }
+}
+
 /* Hero de pagina CON fotografia.
    Tres decisiones, y las tres son a proposito:
 
@@ -186,21 +199,56 @@
    respirar. El hueco de esa seccion no es falta de imagen: son 335px de padding
    alrededor de 320px de contenido. */
 @media (min-width: 64rem) {
-  .page-hero--cold-room {
-    background-image:
-      linear-gradient(96deg, var(--c-green-deep) 0 48%, rgb(42 84 45 / 0) 48.6%),
-      image-set(url('../images/about-hero-1440.jpg') 1x,
-                url('../images/about-hero-2160.jpg') 1.5x,
-                url('../images/about-hero-2880.jpg') 2x);
-  }
   .page-hero--aisle {
     background-image:
       linear-gradient(96deg, var(--c-ink) 0 48%, rgb(27 25 25 / 0) 48.6%),
-      image-set(url('../images/svc-hero-aisle-1440.jpg') 1x,
-                url('../images/svc-hero-aisle-2382.jpg') 1.65x);
+      image-set(url('../images/checklist-overlay-1440.jpg') 1x,
+                url('../images/checklist-overlay-2382.jpg') 1.65x);
   }
-  .page-hero--cold-room,
   .page-hero--aisle { background-size: cover; background-position: center; background-repeat: no-repeat; }
+}
+
+/* --- la fotografia que el movil no veia -------------------------------------
+   Tres secciones tenian su foto SOLO dentro de min-width:64rem y por debajo de
+   1024px eran un rectangulo de color liso: .who, el hero de /services y el de
+   /about-us. Es decir, el visitante tipico de un sitio asi no veia tres de las
+   diez fotografias.
+
+   Bajar sin mas la imagen fuera de la media query no arregla nada, y esta medido
+   ahi arriba: en .who el plano OPACO solo deja escapar un 0,6% de la seccion
+   —se descargarian 188 KB a DPR3 para no ensenar nada—, y en los dos heroes el
+   marco es casi cuadrado a 375px (0,82), no hay min-height, y un 2,4:1 con cover
+   ahi se magnifica hasta lo ilegible; ademas el corte del 48% son 180px a 375px
+   y el titular de 16ch lo cruzaria en todas las lineas.
+
+   Se copia lo que el propio hero de la home ya hace por debajo de 64rem (lineas
+   28-45): banda de foto arriba con altura controlada, color macizo debajo, texto
+   SIEMPRE sobre el color. Asi ninguna linea se apoya en la imagen y el contraste
+   sigue siendo el de los planos, que ya estaba medido.
+
+   Los recortes son propios, no reescalados: el encuadre de escritorio pone el
+   sujeto en la mitad derecha para que sobreviva bajo el plano, y en una banda
+   ancha eso deja media foto vacia.
+
+   El borde inferior de la banda es RECTO a proposito. Los dos heroes ya gastan
+   la diagonal de su pantalla en la cuna .plane--wedge-br, y la regla 3 de
+   base.css:116 permite una por altura de pantalla.
+   -------------------------------------------------------------------------- */
+@media not all and (min-width: 64rem) {
+  .page-hero--aisle { --band-h: clamp(11rem, 34vw, 24rem); }
+  .page-hero--aisle::before {
+    content: "";
+    position: absolute; inset: 0 0 auto 0; z-index: 0;
+    height: var(--band-h);
+    background-size: cover; background-repeat: no-repeat;
+  }
+  .page-hero--aisle::before {
+    background-image: image-set(url('../images/checklist-band-800.jpg') 1x,
+                                url('../images/checklist-band-1200.jpg') 1.5x,
+                                url('../images/checklist-band-1600.jpg') 2x);
+    background-position: 50% 50%;
+  }
+  .page-hero--aisle .page-hero__inner { padding-block-start: calc(var(--band-h) + var(--section-y)); }
 }
 
 /* Fichas de ancla del hero de servicios: ademas de navegar, son la prueba en
@@ -273,9 +321,6 @@
    Doral" sin empujar el formulario: 96-192px de alto, y va DESPUES del hero,
    antes del formulario. Lleva .photo, asi que recibe el mismo tratamiento
    fotografico que el resto (saturate .88 y el scrim de 200deg). */
-.divider-graphic { height: clamp(6rem, 14vw, 12rem); background: var(--c-paper-2); }
-.divider-graphic__media { height: 100%; }
-.divider-graphic__media img { object-fit: cover; object-position: 50% 50%; }
 
 /* ============================ SERVICIOS =================================== */
 .svc-row { display: grid; gap: var(--s-7); align-items: center; }
@@ -309,7 +354,20 @@
 
 /* Puestos que cubrimos: la seccion que mas debe parecer una pagina del folleto. */
 .positions { background: var(--c-ink); color: var(--c-on-dark); }
-.positions__list { margin-block-start: var(--s-7); }
+/* Los catorce puestos son la promesa mas ancha del sitio y se hacia sin una sola
+   imagen. Cabecera a dos columnas desde 48rem —texto a la izquierda, foto a la
+   derecha— y la lista sigue debajo a ancho completo, con sus columns intactas.
+   La foto es la unica del sitio que NO es el mundo de la flor: es lo que hace
+   creible "si el puesto mantiene tu operacion en marcha, ya lo hemos cubierto".
+   No va a sangre: medido en la fase 1, este encuadre solo sobrevive a medias una
+   banda tendida y decapita al operario del fondo. Contenida y en 3:2, que es su
+   proporcion nativa, no pierde nada. */
+.positions__head { display: grid; gap: var(--s-7); }
+@media (min-width: 48rem) {
+  .positions__head { grid-template-columns: 1fr 1fr; gap: var(--s-9); align-items: center; }
+}
+.positions__media { aspect-ratio: 16 / 9; }
+.positions__list { margin-block-start: var(--s-8); }
 @media (min-width: 40rem) { .positions__list { columns: 2; column-gap: var(--s-8); } }
 @media (min-width: 64rem) { .positions__list { columns: 3; } }
 .positions__item {
@@ -325,6 +383,19 @@
 
 /* ============================ CONTACTO ==================================== */
 .contact-hero { background: var(--c-green-deep); color: var(--c-on-dark); }
+/* La foto pasa a ser el fondo del hero con el velo encima, en vez de un hero de
+   verde plano seguido de una rendija de 192px con la misma imagen. Es la
+   estructura de la cinta CTA (mas abajo), pero con el degradado DIRECCIONAL:
+   pesado arriba a la izquierda, donde viven el titular y el lead, y mas abierto
+   abajo a la derecha para que la nave se lea. Las tres fichas son --c-ink opaco,
+   asi que se sostienen solas pase lo que pase detras. */
+.contact-hero__media::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(100deg,
+    rgb(42 84 45 / .97) 0 40%,
+    rgb(42 84 45 / .88) 68%,
+    rgb(27 25 25 / .78));
+}
 .contact-hero__inner { padding-block: var(--section-y) var(--diag-pad); }
 
 /* Las fichas cruzan el corte a proposito: son opacas, asi que ahi el solape es seguro. */
@@ -348,6 +419,10 @@
 a.contact-tile:hover { background: var(--c-ink-2); transform: translateY(-2px); }
 
 .contact-form-section { padding-block: var(--section-y); }
+/* La columna del titular era hueco muerto de 64rem para arriba. La foto responde
+   la misma pregunta que la banda de doral-dock —"existis de verdad y estais en
+   Doral"— pero desde dentro de la nave, con las palmeras al fondo del porton. */
+.contact-form-section__media { aspect-ratio: 3 / 2; margin-block-start: var(--s-7); }
 .contact-form-section__grid { display: grid; gap: var(--s-8); }
 @media (min-width: 64rem) { .contact-form-section__grid { grid-template-columns: 1fr 1.2fr; gap: var(--s-10); align-items: start; } }
 

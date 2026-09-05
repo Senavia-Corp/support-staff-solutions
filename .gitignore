@@ -3,3 +3,8 @@ node_modules/
 .env*
 .claude/
 .DS_Store
+
+# Originales de stock a resolucion completa. NO se comitean: el repositorio es
+# publico y la licencia de Adobe Stock no permite redistribuir el asset entero.
+# Al sitio solo van las variantes recortadas y reducidas, en images/.
+stock/
