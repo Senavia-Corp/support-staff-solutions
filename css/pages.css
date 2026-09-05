@@ -78,22 +78,26 @@
 
 /* --- quienes somos (la diagonal insignia) ---------------------------------- */
 .who { color: var(--c-on-dark); }
-/* La foto DEJA de ir de fondo bajo el plano. El reparto a dos planos —plano
-   opaco al 58% y foto asomando por la derecha— esta pensado para una imagen con
-   UN sujeto pesado a la derecha, que es como funcionaba who-we-are. Un retrato
-   de grupo en fila es la forma contraria: el grupo de seis mide 2.670px sobre un
-   original de 5.184, asi que para caber entero en el 42% libre haria falta un
-   encuadre de 6.357px. Y la diagonal empeora el corte: --diag son 86px a 1440,
-   un 6% del ancho, y para no partir a nadie haria falta ese hueco entre dos
-   personas. No hay recorte que lo arregle: lo que cambia es la composicion.
-   Ahora el texto vive en su columna sobre verde macizo (8,73:1 garantizado, sin
-   depender de ningun cap de ch) y la foto en la suya, en 16/9, que es su
-   proporcion nativa: 0% de recorte y el equipo entero a cualquier ancho. */
+/* La foto va de fondo, en la mitad derecha, bajo el plano partido al 58%. Esta
+   composicion EXIGE una imagen construida para ella: el sujeto tiene que vivir
+   en la banda visible, que esta medida abajo. Una foto con el sujeto centrado
+   se parte, que es lo que pasaba antes de rehacer la imagen. */
+@media (min-width: 64rem) {
+  .who {
+    background-image: image-set(url('../images/warehouse-crew-1300.jpg') 1x,
+                                url('../images/warehouse-crew-2000.jpg') 1.5x,
+                                url('../images/warehouse-crew-2740.jpg') 2x);
+    background-size: cover;
+    /* 25% y no 50%: a 1920 la seccion solo mide 661px y el recorte vertical se
+       come 415px. Centrado dejaba la ventana en 19,3%-80,7% y decapitaba al
+       grupo, que empieza al 13,9%. Al 25% la ventana baja a 9,7%-71,1%: las
+       cabezas entran siempre y el corte cae a la altura del muslo. */
+    background-position: 62% 25%;
+    background-repeat: no-repeat;
+  }
+}
+.who .plane { --split: 58%; }
 .who__inner { padding-block: var(--section-y) var(--diag-pad); }
-.who__grid { display: grid; gap: var(--s-7); }
-.who__media { aspect-ratio: 16 / 9; }
-/* En movil la foto abre la seccion, como el hero de la home. */
-@media not all and (min-width: 64rem) { .who__media { order: -1; } }
 .who__body { max-width: 50ch; color: var(--c-on-dark-2); }
 .who__body p + p { margin-block-start: var(--s-4); }
 .who__pull {
@@ -108,7 +112,8 @@
   max-width: 28ch;
 }
 @media (min-width: 64rem) {
-  .who__grid { grid-template-columns: 1fr 1.25fr; gap: var(--s-9); align-items: center; }
+  .who__inner { padding-block: var(--section-y); }
+  .who__grid { display: grid; grid-template-columns: 50% 1fr; }
   .who__body { max-width: 40ch; }
 }
 
@@ -155,20 +160,6 @@
    peor punto sube a 10,45:1 y 5,85:1. */
 .page-hero__lead { margin-block-start: var(--s-5); color: var(--c-on-dark-2); max-width: 34ch; }
 
-/* El hero de /about-us pasa a dos columnas por el mismo motivo que .who: su foto
-   es un retrato de grupo que ocupa el ancho entero del original y no cabe en el
-   49% que dejaba libre el corte del 48%. Aqui el texto ya no compite con nada. */
-.page-hero__media { aspect-ratio: 16 / 9; }
-@media not all and (min-width: 64rem) { .page-hero__media { order: -1; } }
-@media (min-width: 64rem) {
-  .page-hero--cold-room .page-hero__inner {
-    display: grid; grid-template-columns: 1fr 1.25fr; gap: var(--s-9); align-items: center;
-  }
-}
-@media not all and (min-width: 64rem) {
-  .page-hero--cold-room .page-hero__inner { display: grid; gap: var(--s-7); }
-}
-
 /* Hero de pagina CON fotografia.
    Tres decisiones, y las tres son a proposito:
 
@@ -205,6 +196,14 @@
       image-set(url('../images/checklist-overlay-1440.jpg') 1x,
                 url('../images/checklist-overlay-2382.jpg') 1.65x);
   }
+  .page-hero--cold-room {
+    background-image:
+      linear-gradient(96deg, var(--c-green-deep) 0 48%, rgb(42 84 45 / 0) 48.6%),
+      image-set(url('../images/office-team-1440.jpg') 1x,
+                url('../images/office-team-2000.jpg') 1.5x,
+                url('../images/office-team-2731.jpg') 2x);
+  }
+  .page-hero--cold-room,
   .page-hero--aisle { background-size: cover; background-position: center; background-repeat: no-repeat; }
 }
 
@@ -235,12 +234,26 @@
    base.css:116 permite una por altura de pantalla.
    -------------------------------------------------------------------------- */
 @media not all and (min-width: 64rem) {
-  .page-hero--aisle { --band-h: clamp(11rem, 34vw, 24rem); }
+  .who, .page-hero--cold-room, .page-hero--aisle { --band-h: clamp(11rem, 34vw, 24rem); }
+  .who::before,
+  .page-hero--cold-room::before,
   .page-hero--aisle::before {
     content: "";
     position: absolute; inset: 0 0 auto 0; z-index: 0;
     height: var(--band-h);
     background-size: cover; background-repeat: no-repeat;
+  }
+  .who::before {
+    background-image: image-set(url('../images/warehouse-crew-band-800.jpg') 1x,
+                                url('../images/warehouse-crew-band-1200.jpg') 1.5x,
+                                url('../images/warehouse-crew-band-1600.jpg') 2x);
+    background-position: 50% 35%;
+  }
+  .page-hero--cold-room::before {
+    background-image: image-set(url('../images/office-team-band-800.jpg') 1x,
+                                url('../images/office-team-band-1200.jpg') 1.5x,
+                                url('../images/office-team-band-1600.jpg') 2x);
+    background-position: 50% 40%;
   }
   .page-hero--aisle::before {
     background-image: image-set(url('../images/checklist-band-800.jpg') 1x,
@@ -248,7 +261,9 @@
                                 url('../images/checklist-band-1600.jpg') 2x);
     background-position: 50% 50%;
   }
-  .page-hero--aisle .page-hero__inner { padding-block-start: calc(var(--band-h) + var(--section-y)); }
+  .who .plane { inset: var(--band-h) 0 0 0; }
+  .who__inner,
+  .page-hero__inner { padding-block-start: calc(var(--band-h) + var(--section-y)); }
 }
 
 /* Fichas de ancla del hero de servicios: ademas de navegar, son la prueba en
@@ -316,6 +331,10 @@
 .mission__body { max-width: 46ch; }
 .mission__body p + p { margin-block-start: var(--s-4); }
 .mission h2, .mission h3 { margin-block-end: var(--s-4); }
+/* Mismas metricas que .value__icon y .includes__icon: las tres rejillas de
+   iconos del sitio miden igual. Aqui el <img> SI puede ir de hermano antes del
+   encabezado —el contenedor es un <div> normal, no el <div> de un <dl>. */
+.mission__icon { display: block; width: 2.75rem; height: 2.75rem; margin-block-end: var(--s-4); }
 
 /* Banda divisoria de /contact-us. Responde "existis de verdad y estais en
    Doral" sin empujar el formulario: 96-192px de alto, y va DESPUES del hero,
@@ -350,6 +369,13 @@
 /* <dt> no es un heading, asi que el text-wrap: balance de base.css no le
    llegaba y "Workers' compensation insurance" dejaba "insurance" sola. */
 .includes__term { font-family: var(--ff-display); font-size: var(--fs-h3); letter-spacing: var(--tr-display); text-wrap: balance; }
+/* El icono va DENTRO del <dt>: dentro de un <dl>, el <div> que agrupa solo
+   admite <dt> y <dd>, asi que un <img> hermano no seria HTML valido. Y va
+   encima del termino, no a su izquierda: la columna ya va justa —ver el
+   comentario de las tres columnas mas arriba— y robarle ancho volveria a
+   partir "Workers' compensation insurance". Mismas metricas que .value__icon
+   para que las dos rejillas de iconos del sitio midan igual. */
+.includes__icon { display: block; width: 2.75rem; height: 2.75rem; margin-block-end: var(--s-3); }
 .includes__desc { color: rgb(27 25 25 / .86);   /* .76 daba 4,44:1 sobre el verde: por debajo de AA */ font-size: var(--fs-sm); margin-block-start: var(--s-1); }
 
 /* Puestos que cubrimos: la seccion que mas debe parecer una pagina del folleto. */
