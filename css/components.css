@@ -319,46 +319,64 @@ html:not(.js) .site-nav[hidden] { display: block; }
 .quotes__dot[aria-current="true"]::before { background: var(--c-green); transform: scale(1.4); }
 
 /* -------------------------------------------------------------- logos cliente
-   Siete marcas ajenas con proporciones muy dispares: 931x304, 122x200 vertical,
-   300x90, 600x300, 403x91, 180x96 y 300x51. Una fila de altura fija haria que el
-   vertical se viera diminuto y el apaisado dominara, asi que cada logo lleva un
-   factor optico --s propio: no se escala por pixeles, se iguala por peso visual.
+   Catorce marcas ajenas con proporciones muy dispares: 931x304, 122x200
+   vertical, 300x90, 600x300 y 403x91 entre las cinco que traen fichero. Una
+   fila de altura fija haria que el vertical se viera diminuto y el apaisado
+   dominara, asi que cada logo lleva un factor optico --s propio: no se escala
+   por pixeles, se iguala por peso visual.
 
    Nunca se deforman: max-width y max-height con width/height en auto, que es lo
    que hace object-fit: contain sin necesidad de recortar nada.
 
-   OJO, DOS logos traen fondo BLANCO OPACO y solo se disimulan porque esta franja
-   va sobre --c-paper (#ffffff) PURO. Si se mueve a --c-paper-2 o a un plano de
-   color, aparecen las dos cajas:
+   OJO, UN logo trae fondo BLANCO OPACO y solo se disimula porque esta franja va
+   sobre --c-paper (#ffffff) PURO. Si se mueve a --c-paper-2 o a un plano de
+   color, aparece la caja:
      - logo-servientrega.png    25,3% de pixeles blancos opacos
-     - logo-miami-agro-import.jpg  es JPEG: 100% opaco, sin canal alfa, y ademas
-       el 13,7% de sus pixeles de borde se desvia hasta 24/255 del blanco, un
-       halo de compresion que al 66% de opacidad deja ~16/255 y ya se nota sobre
-       blanco. Pedir a la marca un PNG con alfa a >=360px de ancho.
+   El segundo caso que documentaba este comentario, logo-miami-agro-import.jpg,
+   ya no existe: el cliente pidio retirar Agro Import y el fichero se borro.
    (Bouquet Collection parece tener caja, pero es su propio marco: 0% opaco.)
 
    Son marcas de terceros: ni se recolorean ni se les aplica el verde de SSS.
    El gris de reposo es una atenuacion, no un tinte.
+
+   NUEVE de las catorce NO tienen fichero de logo. No es un hueco a medio hacer:
+   es el estado .logos__wordmark, la marca puesta en tipografia y medida para
+   pesar lo mismo que un logo en gris. Cuando llegue el SVG o el PNG de una de
+   ellas se sustituye la celda entera por un <img> con su --s y no se toca nada
+   mas. La lista de las nueve, con el nombre de fichero que espera cada una,
+   esta en LOCAL-IMPLEMENTATION-PROMPT.md.
    -------------------------------------------------------------------------- */
-/* Rejilla de 2 / 3 / 6 columnas. Son SEIS logos y seis se divide por los tres
-   numeros, asi que no queda huerfano a ningun ancho. Con flex y ancho fijo si
-   quedaba: entre ~928 y ~1100px de viewport la fila rompia 5+1, porque seis
-   items de 9rem mas cinco huecos piden 1024px y ahi no caben. Flex centraba el
-   huerfano, que no es lo mismo que evitarlo.
-   Si se anade el septimo logo, 7 no divide por 2, 3 ni 6: hay que revisarlo. */
+/* La rejilla de 2/3/6 columnas se retira. Se eligio porque SEIS se divide por
+   los tres numeros y no dejaba huerfano a ningun ancho; con CATORCE no existe
+   ninguna terna que cumpla eso, porque 14 solo se divide por 2 y por 7.
+
+   Asi que el reparto deja de depender del numero de marcas y pasa a depender
+   del ancho: flex con base fija y justify-content: center. Con base 8,5rem y
+   hueco de 2rem caben 2 a 375px (304 de los 335 disponibles), 4 a 768 y 7 a
+   1200, que en escritorio es 7+7 exacto. Si manana son quince, la fila corta
+   queda CENTRADA en vez de descolgada a la izquierda, que es lo que hacia la
+   rejilla y lo unico que de verdad se le reprochaba a flex en su dia. */
 .logos {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* stretch, NO center: las celdas no miden lo mismo por dentro (Bouquet
+     Collection es vertical y pide 73px, y "American Consolidation Logistics"
+     se parte en tres lineas). Centradas, cada una caia a una altura distinta y
+     la fila se veia desdentada. Estiradas, la linea entera comparte caja y
+     cada celda centra su contenido por dentro con place-items. */
+  align-items: stretch;
   gap: var(--s-6);
-  align-items: center;
   margin-block-start: var(--s-7);
 }
-@media (min-width: 34rem) { .logos { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 69rem) { .logos { grid-template-columns: repeat(6, 1fr); } }
 .logos__item {
   display: grid;
   place-items: center;
-  min-height: 3.5rem;
+  /* 5rem = 80px: cubre el logo mas alto (Bouquet Collection, 3,5rem x 1,3 =
+     72,8px) y el nombre mas largo a tres lineas (3 x 15px x 1,25 = 56px). Con
+     los 3,5rem de antes la celda la fijaba el contenido y no el componente. */
+  min-height: 5rem;
+  flex: 0 1 8.5rem;
 }
 .logos__item img {
   width: auto;
@@ -368,14 +386,32 @@ html:not(.js) .site-nav[hidden] { display: block; }
   object-fit: contain;
   filter: grayscale(1);
   /* .66 dejaba la mitad de las marcas por debajo de 3:1 de gris medio sobre
-     blanco, y Miami Agro en 1,92:1. Con .78 todas pasan de 3:1 sin recolorear
-     nada: el gris sigue siendo atenuacion, no tinte. */
+     blanco. Con .78 todas pasan de 3:1 sin recolorear nada: el gris sigue
+     siendo atenuacion, no tinte. */
   opacity: .78;
+}
+/* La marca escrita, para las que no tienen fichero. Va en el cuerpo y NO en
+   Anton a proposito: el display gritaria mas que los logos en gris, que es
+   justo lo contrario de lo que hace esta franja.
+   Y va en color, no en opacidad: --c-mute #5c6167 sobre --c-paper da 6,26:1 y
+   cumple AA como texto. Los logos de al lado se atenuan con opacity porque una
+   imagen no tiene que cumplir el minimo de texto y un nombre escrito si. */
+.logos__wordmark {
+  font-family: var(--ff-body);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: .01em;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--c-mute);
 }
 @media (prefers-reduced-motion: no-preference) {
   .logos__item img { transition: opacity var(--dur-2) var(--ease-out), filter var(--dur-2) var(--ease-out); }
+  .logos__wordmark { transition: color var(--dur-2) var(--ease-out); }
 }
 .logos__item:hover img, .logos__item:focus-within img { filter: none; opacity: 1; }
+.logos__item:hover .logos__wordmark, .logos__item:focus-within .logos__wordmark { color: var(--c-ink); }
 
 /* ------------------------------------------------------------------ formularios */
 .field { display: flex; flex-direction: column; gap: var(--s-2); }

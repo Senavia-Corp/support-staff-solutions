@@ -311,8 +311,9 @@ pipx run --spec 'fonttools[woff]' fonttools ttLib.woff2 compress fonts/Campton-S
 Después hay que cambiar los dos `@font-face` de `css/tokens.css:33-46` a
 `format('woff2')` y considerar un `preload` como el que ya tiene Anton.
 
-**Los dos ficheros de logo que faltan**, que no son hallazgo míos sino del propio repo: el
-SVG morado de The Elite Flower y un PNG con alfa de Miami Agro a ≥360px. Mientras no
+**Los ficheros de logo que faltan**, que no son hallazgo míos sino del propio repo: el SVG
+morado de The Elite Flower y un PNG con alfa de Servientrega. Agro Import, el otro caso que
+citaba este párrafo, se retiró a petición del cliente y su JPEG se borró. Mientras no
 lleguen, la franja de marcas tiene que seguir sobre `--c-paper` puro, que es lo que limita
 el arreglo de P2-03 a un filete.
 

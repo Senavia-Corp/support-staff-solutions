@@ -144,12 +144,19 @@ Del despliegue:
 
 Del cliente, para cerrar el diseño:
 
-5. **Dos activos de marca de cliente.** La franja ya lleva los seis logos reales;
-   faltan (a) **The Elite Flower**, cuyo unico SVG disponible es la version toda
-   blanca e invisible sobre la franja: hace falta la variante morada, y con siete
-   logos hay que revisar el reparto porque la rejilla es de 2/3/6 columnas; y
-   (b) un **PNG con alfa a >=360px de ancho para Miami Agro Import**, que hoy es
-   JPEG sin canal alfa y solo se disimula porque la franja va sobre blanco puro.
+5. **Nueve ficheros de logo de cliente.** La franja lleva **catorce** marcas y
+   solo cinco tienen fichero; las otras nueve van escritas con `.logos__wordmark`,
+   que es un estado del componente y no un hueco. Faltan, por orden de la franja:
+   Continental Flowers, Alpine Fresh, American Consolidation Logistics, Champion
+   Air Cargo, Sunshine Bouquet, CBIZ, Rock Garden, Traza Design & Manufacturing y
+   Go Fish Cargo. **La lista completa, con el nombre de fichero y el `--s` que
+   espera cada celda, está en `LOCAL-IMPLEMENTATION-PROMPT.md`.**
+   Siguen pendientes además (a) **The Elite Flower**, cuyo único SVG disponible es
+   la versión toda blanca e invisible sobre la franja: hace falta la variante
+   morada; y (b) un **PNG con alfa para Servientrega**, que hoy trae un 25,3 % de
+   píxeles blancos opacos y solo se disimula porque la franja va sobre blanco puro.
+   El reparto ya no depende del número de marcas: la rejilla de 2/3/6 columnas se
+   sustituyó por flex con base fija y fila corta centrada.
 6. **Foto real de Alejandro Amado.** El 210×320 original se escaló con `topaz_image`
    (`face_enhancement` en `false`, para no inventarle un solo rasgo) a
    `alejandro-amado-576.jpg` + `-384.jpg`, que es lo que de verdad consume el layout:

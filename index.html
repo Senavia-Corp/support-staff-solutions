@@ -75,21 +75,42 @@
       </div>
     </section>
 
-    <!-- Falta el septimo logo, The Elite Flower: el SVG disponible es la version en
-         blanco (28 paths, todos fill:rgb(100%,100%,100%)) y no se ve sobre este fondo.
-         Con la version morada "by Hannaford" se anade en el generador de la franja.
-         La rejilla es de 2/3/6 columnas y seis se divide por los tres numeros; con
-         siete logos habria que revisar el reparto. -->
+    <!-- CATORCE marcas y solo CINCO ficheros de logo. Las otras nueve van escritas
+         (.logos__wordmark), que es un estado del componente y no un hueco: cuando
+         llegue el SVG o el PNG de una de ellas se cambia su <li> por uno con <img>
+         y su --s, y no hay que tocar nada mas. Los nombres de fichero que espera
+         cada una estan en LOCAL-IMPLEMENTATION-PROMPT.md.
+
+         Dos matices de nomenclatura, para que nadie los "arregle" duplicando:
+           - el cliente pidio "US Green" y "Servientrega International"; los dos
+             ficheros que hay dicen "U.S. Greens Corp" y "Servientrega Centro de
+             Soluciones", que es lo que se ve en la imagen. El alt describe la
+             imagen, asi que se queda como esta hasta que lleguen los otros dos.
+           - Falcon Farms no esta en la lista del cliente y tampoco pidio quitarla.
+         Agro Import SI se pidio retirar: fuera de la franja y fuera de images/.
+
+         The Elite Flower sigue sin entrar: el unico SVG disponible es la version
+         toda blanca (28 paths en fill:rgb(100%,100%,100%)) e invisible sobre esta
+         franja. Hace falta la variante morada. -->
     <section class="brands u-page">
       <h2 class="brands__title">Businesses that already trust us</h2>
       <ul class="logos">
-          <li class="logos__item" style="--s:1"><img src="images/logo-servientrega.png" width="600" height="300" loading="eager" decoding="async" alt="Servientrega Centro de Soluciones"></li>
-          <li class="logos__item" style="--s:0.92"><img src="images/logo-falcon-farms.png" width="931" height="304" loading="eager" decoding="async" alt="Falcon Farms"></li>
+          <li class="logos__item"><span class="logos__wordmark">Continental Flowers</span></li>
+          <li class="logos__item"><span class="logos__wordmark">Alpine Fresh</span></li>
+          <li class="logos__item"><span class="logos__wordmark">American Consolidation Logistics</span></li>
+          <li class="logos__item"><span class="logos__wordmark">Champion Air Cargo</span></li>
+          <li class="logos__item"><span class="logos__wordmark">Sunshine Bouquet</span></li>
           <li class="logos__item" style="--s:0.8"><img src="images/logo-us-greens-corp.png" width="403" height="91" loading="eager" decoding="async" alt="U.S. Greens Corp"></li>
           <li class="logos__item" style="--s:1.3"><img src="images/logo-bouquet-collection.png" width="122" height="200" loading="eager" decoding="async" alt="Bouquet Collection"></li>
+          <li class="logos__item" style="--s:1"><img src="images/logo-servientrega.png" width="600" height="300" loading="eager" decoding="async" alt="Servientrega Centro de Soluciones"></li>
           <li class="logos__item" style="--s:0.78"><img src="images/logo-pipeline.png" width="300" height="90" loading="eager" decoding="async" alt="Pipeline"></li>
-          <li class="logos__item" style="--s:0.92"><img src="images/logo-miami-agro-import.jpg" width="180" height="96" loading="eager" decoding="async" alt="Miami Agro Import"></li>
-      </ul>    </section>
+          <li class="logos__item"><span class="logos__wordmark">CBIZ</span></li>
+          <li class="logos__item"><span class="logos__wordmark">Rock Garden</span></li>
+          <li class="logos__item"><span class="logos__wordmark">Traza Design &amp; Manufacturing</span></li>
+          <li class="logos__item"><span class="logos__wordmark">Go Fish Cargo</span></li>
+          <li class="logos__item" style="--s:0.92"><img src="images/logo-falcon-farms.png" width="931" height="304" loading="eager" decoding="async" alt="Falcon Farms"></li>
+      </ul>
+    </section>
 
     <section class="u-section u-page">
       <h2>Our solutions for your business</h2>

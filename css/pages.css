@@ -65,10 +65,10 @@
 /* --- franja de marcas ------------------------------------------------------ */
 /* .brands y la seccion de servicios son las dos blancas y se leian como una
    sola: 2.140px de blanco corrido a 375. Un filete marca la costura sin mover
-   la franja a --c-paper-2, que es lo que haria aparecer las cajas blancas
-   opacas de dos de los seis logos. Cuando lleguen el PNG con alfa de Miami
-   Agro y el SVG morado de The Elite Flower, esto se puede sustituir por el
-   cambio de fondo. */
+   la franja a --c-paper-2, que es lo que haria aparecer la caja blanca opaca de
+   logo-servientrega.png. Al retirar Agro Import queda ese solo caso: con un PNG
+   con alfa de Servientrega y el SVG morado de The Elite Flower, esto se puede
+   sustituir por el cambio de fondo. */
 .brands { padding-block: var(--s-8); border-block-end: 1px solid var(--c-line); }
 .brands__title { font-size: var(--fs-h3); text-align: center; margin-block-end: var(--s-6); }
 
