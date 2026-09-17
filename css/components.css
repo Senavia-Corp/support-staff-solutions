@@ -319,11 +319,11 @@ html:not(.js) .site-nav[hidden] { display: block; }
 .quotes__dot[aria-current="true"]::before { background: var(--c-green); transform: scale(1.4); }
 
 /* -------------------------------------------------------------- logos cliente
-   Catorce marcas ajenas con proporciones muy dispares: 931x304, 122x200
-   vertical, 300x90, 600x300 y 403x91 entre las cinco que traen fichero. Una
-   fila de altura fija haria que el vertical se viera diminuto y el apaisado
-   dominara, asi que cada logo lleva un factor optico --s propio: no se escala
-   por pixeles, se iguala por peso visual.
+   Catorce marcas ajenas con proporciones muy dispares: 158x181 y 122x200 casi
+   verticales, 360x290, 460x132, 931x304, 301x70, 144x37... Una fila de altura
+   fija haria que las verticales se vieran diminutas y las apaisadas dominaran,
+   asi que cada logo lleva un factor optico --s propio: no se escala por pixeles,
+   se iguala por peso visual.
 
    Nunca se deforman: max-width y max-height con width/height en auto, que es lo
    que hace object-fit: contain sin necesidad de recortar nada.
@@ -332,39 +332,36 @@ html:not(.js) .site-nav[hidden] { display: block; }
    sobre --c-paper (#ffffff) PURO. Si se mueve a --c-paper-2 o a un plano de
    color, aparece la caja:
      - logo-servientrega.png    25,3% de pixeles blancos opacos
-   El segundo caso que documentaba este comentario, logo-miami-agro-import.jpg,
-   ya no existe: el cliente pidio retirar Agro Import y el fichero se borro.
-   (Bouquet Collection parece tener caja, pero es su propio marco: 0% opaco.)
+   Antes eran dos: el JPEG de Miami Agro Import era el otro, y ha salido del
+   sitio con la lista nueva. Los ocho logos que entran se han comprobado uno a
+   uno y ninguno trae caja: el de Champion venia como JPEG opaco de su propia
+   web y se le ha extraido el fondo blanco a alfa antes de entrar. No es un
+   recoloreado: el alfa sale de la distancia al blanco y el color se
+   des-premultiplica, asi que recompuesto sobre blanco se desvia 5/255 como
+   mucho del original. (Bouquet Collection parece tener caja, pero es su propio
+   marco: 0% opaco. El blanco de Alpine Fresh son las cumbres y el texto de
+   dentro de su escudo, no un fondo: sus cuatro esquinas estan a alfa 0.)
 
    Son marcas de terceros: ni se recolorean ni se les aplica el verde de SSS.
    El gris de reposo es una atenuacion, no un tinte.
-
-   NUEVE de las catorce NO tienen fichero de logo. No es un hueco a medio hacer:
-   es el estado .logos__wordmark, la marca puesta en tipografia y medida para
-   pesar lo mismo que un logo en gris. Cuando llegue el SVG o el PNG de una de
-   ellas se sustituye la celda entera por un <img> con su --s y no se toca nada
-   mas. La lista de las nueve, con el nombre de fichero que espera cada una,
-   esta en LOCAL-IMPLEMENTATION-PROMPT.md.
    -------------------------------------------------------------------------- */
-/* La rejilla de 2/3/6 columnas se retira. Se eligio porque SEIS se divide por
-   los tres numeros y no dejaba huerfano a ningun ancho; con CATORCE no existe
-   ninguna terna que cumpla eso, porque 14 solo se divide por 2 y por 7.
+/* Antes era una rejilla de 2/3/6 columnas, elegida porque SEIS se divide por los
+   tres numeros y no dejaba huerfano a ningun ancho. Con CATORCE ya no vale: 14
+   solo se divide por 2 y por 7. En vez de buscar otro reparto que se rompa con
+   la marca quince, se pasa a flex con wrap y centrado, y asi el numero de logos
+   deja de importar: una fila corta queda centrada, no varada a la izquierda.
+   Medido: 2 por fila a 375, 4 a 768, 5 a 1024, 6 a 1200 y 7 a 1440 -> 7+7 justo.
 
-   Asi que el reparto deja de depender del numero de marcas y pasa a depender
-   del ancho: flex con base fija y justify-content: center. Con base 8,5rem y
-   hueco de 2rem caben 2 a 375px (304 de los 335 disponibles), 4 a 768 y 7 a
-   1200, que en escritorio es 7+7 exacto. Si manana son quince, la fila corta
-   queda CENTRADA en vez de descolgada a la izquierda, que es lo que hacia la
-   rejilla y lo unico que de verdad se le reprochaba a flex en su dia. */
+   align-items: stretch, NO center, y min-height 5rem, NO 3.5rem. Las celdas no
+   son igual de altas por dentro: Bouquet Collection es vertical y renderiza 73px,
+   y "American Consolidation & Logistics" parte en tres lineas. Con center y alto
+   segun contenido cada celda caia a una altura distinta y la fila salia desigual.
+   5rem cubre el logo mas alto (3,5rem x 1,3 = 72,8px) y un nombre de tres lineas
+   (3 x 15px x 1,25 = 56px). */
 .logos {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  /* stretch, NO center: las celdas no miden lo mismo por dentro (Bouquet
-     Collection es vertical y pide 73px, y "American Consolidation Logistics"
-     se parte en tres lineas). Centradas, cada una caia a una altura distinta y
-     la fila se veia desdentada. Estiradas, la linea entera comparte caja y
-     cada celda centra su contenido por dentro con place-items. */
   align-items: stretch;
   gap: var(--s-6);
   margin-block-start: var(--s-7);
@@ -372,9 +369,6 @@ html:not(.js) .site-nav[hidden] { display: block; }
 .logos__item {
   display: grid;
   place-items: center;
-  /* 5rem = 80px: cubre el logo mas alto (Bouquet Collection, 3,5rem x 1,3 =
-     72,8px) y el nombre mas largo a tres lineas (3 x 15px x 1,25 = 56px). Con
-     los 3,5rem de antes la celda la fijaba el contenido y no el componente. */
   min-height: 5rem;
   flex: 0 1 8.5rem;
 }
@@ -390,12 +384,12 @@ html:not(.js) .site-nav[hidden] { display: block; }
      siendo atenuacion, no tinte. */
   opacity: .78;
 }
-/* La marca escrita, para las que no tienen fichero. Va en el cuerpo y NO en
-   Anton a proposito: el display gritaria mas que los logos en gris, que es
-   justo lo contrario de lo que hace esta franja.
-   Y va en color, no en opacidad: --c-mute #5c6167 sobre --c-paper da 6,26:1 y
-   cumple AA como texto. Los logos de al lado se atenuan con opacity porque una
-   imagen no tiene que cumplir el minimo de texto y un nombre escrito si. */
+/* Rotulo para la marca de la que no hay activo oficial. Va en la tipografia de
+   CUERPO, no en Anton: el display gritaria mas que los logos en gris, que es
+   justo lo contrario de lo que hace esta franja. Y se atenua con COLOR, no con
+   opacidad: --c-mute #5c6167 sobre --c-paper da 6,25:1 y cumple AA como texto,
+   mientras que los logos de al lado son imagenes y no tienen que cumplirlo. Por
+   eso los dos se apagan de forma distinta. */
 .logos__wordmark {
   font-family: var(--ff-body);
   font-size: var(--fs-sm);
@@ -411,7 +405,8 @@ html:not(.js) .site-nav[hidden] { display: block; }
   .logos__wordmark { transition: color var(--dur-2) var(--ease-out); }
 }
 .logos__item:hover img, .logos__item:focus-within img { filter: none; opacity: 1; }
-.logos__item:hover .logos__wordmark, .logos__item:focus-within .logos__wordmark { color: var(--c-ink); }
+.logos__item:hover .logos__wordmark,
+.logos__item:focus-within .logos__wordmark { color: var(--c-ink); }
 
 /* ------------------------------------------------------------------ formularios */
 .field { display: flex; flex-direction: column; gap: var(--s-2); }

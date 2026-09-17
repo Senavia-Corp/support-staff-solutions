@@ -125,11 +125,11 @@
           <p class="profile__role">General Manager</p>
         </div>
         <div class="profile__bio u-prose">
-          <p>Alejandro Amado founded Support Staff Solutions USA LLC in May 2019. He brings more than 25 years of leadership experience, a record of competitive growth among US employment agencies, and a history of placing temporary staff on assignment with recognized logistics companies in Florida. He has extensive experience in flexible staffing solutions and a commitment to quality, and he focuses on placing staff on assignment with logistics companies in record time, through cost-effective recruiting services. All employees are covered by workers&rsquo; compensation insurance.</p>
-          <p>As General Manager and CIO for the Americas, he directs the company&rsquo;s financial and corporate strategy and places staff on assignment across logistics operations. That remit covers the whole group, including his first company, Gestion Temporal de Colombia S.A.S., founded in Colombia in 2007. Alejandro leads a team of more than 250 people, made up of professionals and staff on assignment at major logistics companies in the United States and Latin America (Colombia).</p>
-          <p class="profile__pull">Helping people from many countries reach their financial aspirations and family goals, and bringing a daily income into their homes.</p>
-          <p>Alejandro works with his financial, IT, executive and field teams to develop long- and short-term growth strategies and the company&rsquo;s financial objectives. He is committed to expanding Support Staff Solutions USA LLC worldwide, carrying its mission and its social commitment to provide employment to everyone who brings tenacity, attitude, enthusiasm, motivation and the desire to get ahead.</p>
-          <p>Alejandro Amado is a lawyer, a 1999 graduate of Universidad Libre in Bogota, Colombia. He specializes in human resources, commercial law and corporate law, and he worked for seven years at the Superintendency of Companies and at the Amados law firm, both in Colombia.</p>
+          <p>Alejandro Amado founded Support Staff Solutions USA LLC in May 2019. He brings more than 25 years of leadership experience, a record of competitive growth among US employment agencies, and years of placing temporary staff on assignment with well-known logistics companies in Florida. He has extensive experience in flexible staffing solutions and a firm commitment to quality, and he focuses on delivering staff on assignment to logistics companies in record time and on cost-effective recruiting. All staff are covered by workers&rsquo; compensation insurance.</p>
+          <p>As General Manager and CIO for the Americas, he sets the financial and corporate strategy, places staff on assignment across logistics operations, and leads the group as a whole &mdash; including Gestion Temporal de Colombia S.A.S., the first company he created, in Colombia in 2007. Alejandro Amado leads a team of more than 250 people, among them professionals and staff on assignment at major logistics companies in the United States and Latin America (Colombia).</p>
+          <p class="profile__pull">Helping people from many countries achieve their financial aspirations and family goals, bringing a daily income into their homes.</p>
+          <p>Alejandro works with his whole team &mdash; financial, IT, executive and field &mdash; to develop long- and short-term growth strategies and the company&rsquo;s financial objectives. He is committed to expanding Support Staff Solutions USA LLC worldwide, carrying with it a mission and a social commitment: to provide employment to everyone who has tenacity, attitude, enthusiasm, motivation and the desire to get ahead.</p>
+          <p>Alejandro Amado is a lawyer from the Libre University of Bogota, Colombia (1999), and a specialist in human-resources, commercial and corporate law. He worked at the Superintendency of Companies for seven years and at the Amados law firm, in Colombia.</p>
         </div>
       </div>
     </section>
@@ -156,39 +156,33 @@
       </div>
     </section>
 
-    <!-- CATORCE marcas y solo CINCO ficheros de logo. Las otras nueve van escritas
-         (.logos__wordmark), que es un estado del componente y no un hueco: cuando
-         llegue el SVG o el PNG de una de ellas se cambia su <li> por uno con <img>
-         y su --s, y no hay que tocar nada mas. Los nombres de fichero que espera
-         cada una estan en LOCAL-IMPLEMENTATION-PROMPT.md.
-
-         Dos matices de nomenclatura, para que nadie los "arregle" duplicando:
-           - el cliente pidio "US Green" y "Servientrega International"; los dos
-             ficheros que hay dicen "U.S. Greens Corp" y "Servientrega Centro de
-             Soluciones", que es lo que se ve en la imagen. El alt describe la
-             imagen, asi que se queda como esta hasta que lleguen los otros dos.
-           - Falcon Farms no esta en la lista del cliente y tampoco pidio quitarla.
-         Agro Import SI se pidio retirar: fuera de la franja y fuera de images/.
-
-         The Elite Flower sigue sin entrar: el unico SVG disponible es la version
-         toda blanca (28 paths en fill:rgb(100%,100%,100%)) e invisible sobre esta
-         franja. Hace falta la variante morada. -->
+    <!-- Catorce marcas: las trece que pidio el cliente mas Falcon Farms, que no pidio
+         quitar y cierra la lista. El porque de la marca que sale va en components.css.
+         Cuatro de las que pedia ya estaban con otro nombre y no se duplican: "US Green"
+         es U.S. Greens Corp, Bouquet Collection y Pipeline estaban tal cual, y su
+         "Servientrega International" NO es esta: el PNG es el lockup de Servientrega
+         Centro de Soluciones, otra unidad, asi que el alt sigue describiendo lo que se ve.
+         Go Fish Cargo va como rotulo tipografico: gofishcargo.com rechaza toda conexion y
+         no tiene copia en el Archive, asi que no hay activo oficial que traerse. Es un
+         estado disenado, no un hueco; en cuanto llegue el fichero se cambia por un <img>.
+         The Elite Flower sigue fuera: su unico SVG es la version toda blanca (28 paths a
+         fill:rgb(100%,100%,100%)) y no se ve sobre esta franja. Hace falta la morada. -->
     <section class="brands u-section u-page">
       <h2 class="brands__title">Businesses that already trust us</h2>
       <p class="u-lead section__lead brands__lead">We have been key partners in helping many businesses achieve their goals.</p>
       <ul class="logos">
-          <li class="logos__item"><span class="logos__wordmark">Continental Flowers</span></li>
-          <li class="logos__item"><span class="logos__wordmark">Alpine Fresh</span></li>
-          <li class="logos__item"><span class="logos__wordmark">American Consolidation Logistics</span></li>
-          <li class="logos__item"><span class="logos__wordmark">Champion Air Cargo</span></li>
-          <li class="logos__item"><span class="logos__wordmark">Sunshine Bouquet</span></li>
+          <li class="logos__item" style="--s:1.15"><img src="images/logo-continental-flowers.png" width="158" height="181" loading="lazy" decoding="async" alt="Continental Flowers"></li>
+          <li class="logos__item" style="--s:1.05"><img src="images/logo-alpine-fresh.png" width="360" height="230" loading="lazy" decoding="async" alt="Alpine Fresh"></li>
+          <li class="logos__item" style="--s:1.15"><img src="images/logo-american-consolidation-logistics.png" width="360" height="290" loading="lazy" decoding="async" alt="American Consolidation &amp; Logistics"></li>
+          <li class="logos__item" style="--s:0.95"><img src="images/logo-champion-air-cargo.png" width="296" height="120" loading="lazy" decoding="async" alt="Champion Air Cargo"></li>
+          <li class="logos__item" style="--s:0.88"><img src="images/logo-sunshine-bouquet.png" width="460" height="132" loading="lazy" decoding="async" alt="Sunshine Bouquet"></li>
           <li class="logos__item" style="--s:0.8"><img src="images/logo-us-greens-corp.png" width="403" height="91" loading="lazy" decoding="async" alt="U.S. Greens Corp"></li>
           <li class="logos__item" style="--s:1.3"><img src="images/logo-bouquet-collection.png" width="122" height="200" loading="lazy" decoding="async" alt="Bouquet Collection"></li>
           <li class="logos__item" style="--s:1"><img src="images/logo-servientrega.png" width="600" height="300" loading="lazy" decoding="async" alt="Servientrega Centro de Soluciones"></li>
           <li class="logos__item" style="--s:0.78"><img src="images/logo-pipeline.png" width="300" height="90" loading="lazy" decoding="async" alt="Pipeline"></li>
-          <li class="logos__item"><span class="logos__wordmark">CBIZ</span></li>
-          <li class="logos__item"><span class="logos__wordmark">Rock Garden</span></li>
-          <li class="logos__item"><span class="logos__wordmark">Traza Design &amp; Manufacturing</span></li>
+          <li class="logos__item" style="--s:0.72"><img src="images/logo-cbiz.svg" width="144" height="37" loading="lazy" decoding="async" alt="CBIZ"></li>
+          <li class="logos__item" style="--s:0.9"><img src="images/logo-rock-garden.png" width="460" height="132" loading="lazy" decoding="async" alt="Rock Garden"></li>
+          <li class="logos__item" style="--s:0.78"><img src="images/logo-trazza-design-manufacturing.png" width="301" height="70" loading="lazy" decoding="async" alt="Trazza Design &amp; Manufacturing"></li>
           <li class="logos__item"><span class="logos__wordmark">Go Fish Cargo</span></li>
           <li class="logos__item" style="--s:0.92"><img src="images/logo-falcon-farms.png" width="931" height="304" loading="lazy" decoding="async" alt="Falcon Farms"></li>
       </ul>

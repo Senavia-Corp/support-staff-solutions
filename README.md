@@ -144,19 +144,16 @@ Del despliegue:
 
 Del cliente, para cerrar el diseño:
 
-5. **Nueve ficheros de logo de cliente.** La franja lleva **catorce** marcas y
-   solo cinco tienen fichero; las otras nueve van escritas con `.logos__wordmark`,
-   que es un estado del componente y no un hueco. Faltan, por orden de la franja:
-   Continental Flowers, Alpine Fresh, American Consolidation Logistics, Champion
-   Air Cargo, Sunshine Bouquet, CBIZ, Rock Garden, Traza Design & Manufacturing y
-   Go Fish Cargo. **La lista completa, con el nombre de fichero y el `--s` que
-   espera cada celda, está en `LOCAL-IMPLEMENTATION-PROMPT.md`.**
-   Siguen pendientes además (a) **The Elite Flower**, cuyo único SVG disponible es
-   la versión toda blanca e invisible sobre la franja: hace falta la variante
-   morada; y (b) un **PNG con alfa para Servientrega**, que hoy trae un 25,3 % de
-   píxeles blancos opacos y solo se disimula porque la franja va sobre blanco puro.
-   El reparto ya no depende del número de marcas: la rejilla de 2/3/6 columnas se
-   sustituyó por flex con base fija y fila corta centrada.
+5. **Dos activos de marca de cliente.** La franja ya lleva catorce marcas, trece
+   con su logo real; faltan (a) el **logo de Go Fish Cargo**, que hoy va como
+   rotulo tipografico porque gofishcargo.com rechaza toda conexion y no tiene
+   copia en el Internet Archive: no hay activo oficial que traerse; y (b) un
+   **PNG con alfa para Servientrega**, que es el unico logo que queda con fondo
+   blanco opaco y por el que la franja tiene que seguir sobre blanco puro. Miami
+   Agro Import, que era el otro, ha salido del sitio a peticion del cliente. The
+   Elite Flower sigue fuera por lo mismo de siempre: su unico SVG es la version
+   toda blanca e invisible sobre la franja, y hace falta la morada. El reparto ya
+   no depende del numero de logos: la franja es flex con wrap y centrado.
 6. **Foto real de Alejandro Amado.** El 210×320 original se escaló con `topaz_image`
    (`face_enhancement` en `false`, para no inventarle un solo rasgo) a
    `alejandro-amado-576.jpg` + `-384.jpg`, que es lo que de verdad consume el layout:
