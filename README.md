@@ -144,25 +144,22 @@ Del despliegue:
 
 Del cliente, para cerrar el diseño:
 
-5. **Dos activos de marca de cliente.** La franja lleva catorce marcas, trece con
-   su logo real. Faltan:
+5. **Dos activos de marca de cliente.** La franja lleva catorce marcas y las
+   catorce con logo. Quedan dos ficheros por mejorar, ninguno bloqueante:
 
-   (a) **El logo de Go Fish Cargo**, que hoy va como rotulo tipografico.
+   (a) **La variante primaria del logo de Beacon Fisheries.** La celda que el
+   cliente pidio como "Go Fish Cargo" ya lleva logo, pero es una pieza derivada.
    `gofishcargo.com` rechaza toda conexion y no tiene copia en el Internet
-   Archive, pero la empresa SI esta en la web: opera bajo la marca **Beacon
-   Fisheries** (`beaconfisheries.com`), cuya direccion registrada es literalmente
-   "C/O GO FISH CARGO, 2605 NW 75th Ave, Miami" y cuyos registros de aduana van a
-   nombre de "BEACON FISHERIES C/O GOFISH CARGO": misma nave, misma operacion.
-   **Lo que hay que pedirles es la variante PRIMARIA u OSCURA de su logo.** Su web
-   solo publica variantes en reverso, que son inservibles aqui:
-   `Beacon-Reverse-Logo.svg` lleva el faro en naranja #f26432 pero TODO el
-   rotulo en `fill:#fff`, asi que sobre esta franja desaparece el nombre y solo
-   queda el faro, que ademas el `grayscale(1)` deja en gris; `footer-logo.svg` es
-   blanco entero. Revisada su biblioteca de medios: no hay ninguna version oscura
-   publicada. No se recolorea, por la misma regla que dejo fuera a The Elite
-   Flower. Pendiente tambien de decidir con el cliente que nombre va en esa celda,
-   porque la marca que tiene logo se llama Beacon Fisheries y su lista decia Go
-   Fish Cargo.
+   Archive; la empresa opera bajo la marca **Beacon Fisheries**
+   (`beaconfisheries.com`), con direccion registrada "C/O GO FISH CARGO, 2605 NW
+   75th Ave, Miami" y registros de aduana a nombre de "BEACON FISHERIES C/O
+   GOFISH CARGO": misma nave, misma operacion. Beacon solo publica su marca en
+   reverso, para fondo oscuro, asi que se le ha cambiado el color del rotulo de
+   #fff a su propio azul #133363 -- ver la excepcion razonada en
+   `css/components.css`. **Lo que hay que pedirles es su variante primaria u
+   oscura**, y entonces se sustituye el fichero y se borra la excepcion. Por eso
+   la celda dice "Beacon Fisheries" y no "Go Fish Cargo": el alt describe lo que
+   se ve.
 
    (b) **Un PNG con alfa para Servientrega**, que es el unico logo que queda con
    fondo blanco opaco y por el que la franja tiene que seguir sobre blanco puro.

@@ -344,6 +344,19 @@ html:not(.js) .site-nav[hidden] { display: block; }
 
    Son marcas de terceros: ni se recolorean ni se les aplica el verde de SSS.
    El gris de reposo es una atenuacion, no un tinte.
+
+   EXCEPCION, UNA, y con el cliente delante: logo-beacon-fisheries.svg. Beacon
+   solo publica su marca en reverso -- el faro en naranja y TODO el rotulo en
+   fill:#fff -- porque su web es de fondo oscuro. Sobre esta franja el nombre
+   desaparecia y quedaba un glifo sin identificar. Revisada su biblioteca entera,
+   el Archive y los directorios del sector: no existe version sobre claro.
+   Se ha cambiado UNA declaracion, la del rotulo, de #fff a #133363. Ese azul no
+   es inventado: es el de lighthouse-illustration.svg, 1131 paths, un activo de
+   marca suyo de peso, asi que la pieza se queda dentro de su paleta. El faro
+   (#f26432) y toda la geometria estan intactos.
+   Sigue siendo un lockup que Beacon no ha publicado, y se nota en :hover, que es
+   donde la franja quita el grayscale. Cuando manden su variante primaria, se
+   sustituye el fichero entero y esta excepcion se borra de aqui.
    -------------------------------------------------------------------------- */
 /* Antes era una rejilla de 2/3/6 columnas, elegida porque SEIS se divide por los
    tres numeros y no dejaba huerfano a ningun ancho. Con CATORCE ya no vale: 14
@@ -384,7 +397,10 @@ html:not(.js) .site-nav[hidden] { display: block; }
      siendo atenuacion, no tinte. */
   opacity: .78;
 }
-/* Rotulo para la marca de la que no hay activo oficial. Va en la tipografia de
+/* Rotulo para una marca de la que no haya activo oficial. HOY NO LO USA NINGUNA
+   CELDA -- las catorce llevan logo -- pero se queda: es un estado del componente,
+   no codigo muerto, y en el README quedan dos marcas que podrian necesitarlo.
+   Va en la tipografia de
    CUERPO, no en Anton: el display gritaria mas que los logos en gris, que es
    justo lo contrario de lo que hace esta franja. Y se atenua con COLOR, no con
    opacidad: --c-mute #5c6167 sobre --c-paper da 6,25:1 y cumple AA como texto,
