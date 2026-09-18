@@ -144,16 +144,34 @@ Del despliegue:
 
 Del cliente, para cerrar el diseño:
 
-5. **Dos activos de marca de cliente.** La franja ya lleva catorce marcas, trece
-   con su logo real; faltan (a) el **logo de Go Fish Cargo**, que hoy va como
-   rotulo tipografico porque gofishcargo.com rechaza toda conexion y no tiene
-   copia en el Internet Archive: no hay activo oficial que traerse; y (b) un
-   **PNG con alfa para Servientrega**, que es el unico logo que queda con fondo
-   blanco opaco y por el que la franja tiene que seguir sobre blanco puro. Miami
-   Agro Import, que era el otro, ha salido del sitio a peticion del cliente. The
-   Elite Flower sigue fuera por lo mismo de siempre: su unico SVG es la version
-   toda blanca e invisible sobre la franja, y hace falta la morada. El reparto ya
-   no depende del numero de logos: la franja es flex con wrap y centrado.
+5. **Dos activos de marca de cliente.** La franja lleva catorce marcas, trece con
+   su logo real. Faltan:
+
+   (a) **El logo de Go Fish Cargo**, que hoy va como rotulo tipografico.
+   `gofishcargo.com` rechaza toda conexion y no tiene copia en el Internet
+   Archive, pero la empresa SI esta en la web: opera bajo la marca **Beacon
+   Fisheries** (`beaconfisheries.com`), cuya direccion registrada es literalmente
+   "C/O GO FISH CARGO, 2605 NW 75th Ave, Miami" y cuyos registros de aduana van a
+   nombre de "BEACON FISHERIES C/O GOFISH CARGO": misma nave, misma operacion.
+   **Lo que hay que pedirles es la variante PRIMARIA u OSCURA de su logo.** Su web
+   solo publica variantes en reverso, que son inservibles aqui:
+   `Beacon-Reverse-Logo.svg` lleva el faro en naranja #f26432 pero TODO el
+   rotulo en `fill:#fff`, asi que sobre esta franja desaparece el nombre y solo
+   queda el faro, que ademas el `grayscale(1)` deja en gris; `footer-logo.svg` es
+   blanco entero. Revisada su biblioteca de medios: no hay ninguna version oscura
+   publicada. No se recolorea, por la misma regla que dejo fuera a The Elite
+   Flower. Pendiente tambien de decidir con el cliente que nombre va en esa celda,
+   porque la marca que tiene logo se llama Beacon Fisheries y su lista decia Go
+   Fish Cargo.
+
+   (b) **Un PNG con alfa para Servientrega**, que es el unico logo que queda con
+   fondo blanco opaco y por el que la franja tiene que seguir sobre blanco puro.
+   Miami Agro Import, que era el otro, ha salido del sitio a peticion del cliente.
+
+   The Elite Flower sigue fuera por lo mismo de siempre: su unico SVG es la
+   version toda blanca e invisible sobre la franja, y hace falta la morada. El
+   reparto ya no depende del numero de logos: la franja es flex con wrap y
+   centrado.
 6. **Foto real de Alejandro Amado.** El 210×320 original se escaló con `topaz_image`
    (`face_enhancement` en `false`, para no inventarle un solo rasgo) a
    `alejandro-amado-576.jpg` + `-384.jpg`, que es lo que de verdad consume el layout:
