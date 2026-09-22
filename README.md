@@ -102,6 +102,15 @@ momento, y no queda ni un `opacity:0` en el HTML.
 si falta una, la función responde 500 y registra solo los nombres que faltan, nunca valores.
 `npm run check-smtp` verifica la credencial de Gmail sin enviar nada.
 
+**Configuradas el 22 de septiembre de 2026, solo en _Production_**: Gmail por `smtp.gmail.com:465`
+con una contraseña de aplicación del Gmail del cliente, y `MAIL_TO` al buzón que publica el
+propio sitio. Se probaron con un envío real por formulario: llegan con el `From` del Gmail y el
+`Reply-To` de quien rellena. En _Preview_ sigue habiendo `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER` y
+`MAIL_TO` antiguos pero no `SMTP_PASS`, así que allí los formularios responden 500.
+
+`SMTP_PASS` es _sensitive_: Vercel no deja leerla ni cambiarle el nombre. Si aparece una
+`smtp_key_gmail`, es la misma clave guardada con un nombre que el código no lee: sobra.
+
 ## Desarrollo
 
 ```bash
@@ -137,7 +146,7 @@ Sobre el build servido, no a ojo:
 
 Del despliegue:
 
-1. **`SMTP_PASS`** en Vercel. Sin ella los formularios devuelven 500.
+1. ~~**`SMTP_PASS`** en Vercel.~~ Hecho el 22-09-2026: ver _Variables de entorno_.
 2. **Cambio de DNS** en Cloudflare, con el usuario delante. **El DNS sigue en Webflow.**
 3. **Widget de Turnstile**, que necesita el dominio dado de alta en Cloudflare.
 4. **Cancelar Webflow**, ya con el DNS verificado.
