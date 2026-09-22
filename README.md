@@ -1,7 +1,8 @@
 # Support Staff Solutions
 
 Sitio de [supportstaffsolutionsusa.com](https://www.supportstaffsolutionsusa.com).
-5 páginas estáticas, sin CMS, sin build, sin dependencias de terceros en runtime.
+5 páginas estáticas, sin CMS, sin build, sin dependencias de terceros en runtime salvo
+Turnstile en las dos páginas con formulario.
 
 El repo tiene dos hitos que conviene conocer:
 
@@ -89,7 +90,28 @@ momento, y no queda ni un `opacity:0` en el HTML.
 - el `action` (`?f=contact` / `?f=employment`);
 - el envoltorio `.w-form`, con `.w-form-done` y `.w-form-fail` **como hermanos del `<form>`**;
 - el `data-redirect` del formulario de empleo y el `[type="submit"]` con `data-wait`;
-- **todos los `name=`**, que `api/submit.js` tiene en lista blanca uno a uno.
+- **todos los `name=`**, que `api/submit.js` tiene en lista blanca uno a uno;
+- el `<div class="cf-turnstile">` **dentro del `<form>`**, en el mismo contenedor que el botón.
+
+### Antibots: Turnstile
+
+Los dos formularios llevan el widget de Cloudflare Turnstile (cuenta de Cloudflare del
+cliente). El widget mete su token en el campo `cf-turnstile-response` y `api/submit.js` lo
+valida contra `siteverify` **antes de enviar nada**: sin token válido responde 403 y no sale
+ningún email. El token no está en la lista blanca, así que nunca llega al correo.
+
+- La **site key** es pública y va escrita en el HTML de las dos páginas. La **secret key**
+  vive solo en Vercel, como `TURNSTILE_SECRET_KEY`.
+- **Falla cerrado**: si Cloudflare no contesta en 8 s, el envío se rechaza y el visitante ve
+  el panel de error con el teléfono.
+- El token es de un solo uso: si un envío falla, `form-submit.js` reinicia el widget para
+  que el reintento lleve uno nuevo.
+- El widget solo funciona en los dominios autorizados en Cloudflare, que tienen que ser
+  `supportstaffsolutionsusa.com` (que cubre `www`) y `support-staff-solutions.vercel.app`.
+  En cualquier otro, incluidos `localhost` y los previews, sale en error y el formulario no
+  envía.
+- La respuesta 403 incluye los `error-codes` de Cloudflare. `invalid-input-secret` significa
+  que la secret key de Vercel no es la de este widget.
 
 > ⚠️ **`.w-form-done` y `.w-form-fail` llevan `display: none` en `css/components.css`.**
 > Esa regla venía de `css/webflow.css`, que este rediseño borró, y `form-submit.js` solo
@@ -98,8 +120,9 @@ momento, y no queda ni un `opacity:0` en el HTML.
 
 ### Variables de entorno
 
-`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_TO`. Las cinco son obligatorias;
-si falta una, la función responde 500 y registra solo los nombres que faltan, nunca valores.
+`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_TO` y `TURNSTILE_SECRET_KEY`. Las
+seis son obligatorias; si falta una, la función responde 500 y registra solo los nombres que
+faltan, nunca valores.
 `npm run check-smtp` verifica la credencial de Gmail sin enviar nada.
 
 **Configuradas el 22 de septiembre de 2026, solo en _Production_**: Gmail por `smtp.gmail.com:465`
@@ -128,7 +151,8 @@ Sobre el build servido, no a ojo:
 - **5 páginas × 4 anchos (375, 768, 1024, 1440)**: 0 elementos en `opacity:0`, 0 scroll
   horizontal, un solo `<h1>` por página, sin saltos de nivel de encabezado, ninguna `<img>`
   sin `alt`, 0 errores de consola.
-- **64 referencias locales**, todas 200 por HTTP. **Cero peticiones a terceros.**
+- **64 referencias locales**, todas 200 por HTTP. **Cero peticiones a terceros**, salvo
+  Turnstile (`challenges.cloudflare.com`) en las dos páginas con formulario.
 - **Anclas de `/services`**: caen con 15px de holgura bajo la barra fija a los cuatro
   anchos, entrando en frío y dentro de la misma página. Antes el destino quedaba 90,7px por
   debajo del borde inferior de la barra.
@@ -148,7 +172,7 @@ Del despliegue:
 
 1. ~~**`SMTP_PASS`** en Vercel.~~ Hecho el 22-09-2026: ver _Variables de entorno_.
 2. **Cambio de DNS** en Cloudflare, con el usuario delante. **El DNS sigue en Webflow.**
-3. **Widget de Turnstile**, que necesita el dominio dado de alta en Cloudflare.
+3. ~~**Widget de Turnstile**~~ Hecho el 22-09-2026: ver _Antibots: Turnstile_.
 4. **Cancelar Webflow**, ya con el DNS verificado.
 
 Del cliente, para cerrar el diseño:

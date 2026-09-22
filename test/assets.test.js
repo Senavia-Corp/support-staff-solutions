@@ -18,7 +18,11 @@ const css = fs.readdirSync(path.join(ROOT, 'css')).map((f) => path.join('css', f
 // propio (scroll-snap en CSS) y el widget de Elfsight llevaba roto desde antes
 // de migrar (0 hijos, 0px de alto, tambien en el sitio de Webflow).
 // El conjunto vacio es mas estricto que la lista anterior, no menos.
-const EXTERNOS_OK = []
+//
+// La unica excepcion es Turnstile, y es a proposito: sin el, el formulario de empleo
+// (SSN y datos bancarios) es un rele de correo abierto. Solo lo cargan las dos paginas
+// con formulario; cualquier otro tercero sigue rompiendo esta prueba.
+const EXTERNOS_OK = ['challenges.cloudflare.com']
 
 function refs(file) {
   const s = fs.readFileSync(path.join(ROOT, file), 'utf8')

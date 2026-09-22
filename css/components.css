@@ -460,6 +460,13 @@ html:not(.js) .site-nav[hidden] { display: block; }
 .form-grid { display: grid; gap: var(--s-5); }
 @media (min-width: 40rem) { .form-grid--2 { grid-template-columns: 1fr 1fr; } }
 
+/* Turnstile, encima del boton y en su mismo contenedor: en el de empleo los bloques
+   van a --s-9 y como bloque propio quedaria a 96px del boton que protege. El alto es
+   el del widget en tamano normal (300x65), reservado para que el boton no salte cuando
+   llega el iframe de Cloudflare. line-height: 0 porque el iframe es inline y hereda el
+   interlineado del cuerpo: sin esto media 75px, y el boton saltaba 10px al cargar. */
+.cf-turnstile { min-height: 65px; line-height: 0; margin-block-end: var(--s-4); }
+
 /* ============================================================================
    IMPORTANTE — paneles de resultado del formulario.
 
