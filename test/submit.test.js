@@ -142,6 +142,46 @@ test('el token va a siteverify con el secreto y la IP, y no llega al email', asy
   assert.doesNotMatch(sent[0].text, /bueno|turnstile/i)
 })
 
+test('el aviso sale tambien en HTML, con lo que escribio el visitante escapado', async () => {
+  sent.length = 0
+  const r = res()
+  await handler({ method: 'POST', query: { f: 'contact' },
+    body: { ...CONTACT, name: '<b>Ana</b> & "co"', Message: 'Linea 1\nLinea 2' } }, r)
+  assert.strictEqual(r.statusCode, 200)
+  const h = sent[0].html
+  assert.match(h, /&lt;b&gt;Ana&lt;\/b&gt; &amp; &quot;co&quot;/)
+  assert.doesNotMatch(h, /<b>Ana<\/b>/)
+  assert.match(h, /Linea 1<br>Linea 2/)
+  assert.match(h, /href="mailto:ana@example\.com"/)
+  assert.doesNotMatch(h, /bueno/) // el token de Turnstile no llega ni al HTML
+  // El texto plano sigue saliendo igual: es la alternativa sin estilos.
+  assert.match(sent[0].text, /^Full Name: <b>Ana<\/b> & "co"$/m)
+})
+
+test('el de empleo lleva el aviso de datos sensibles y los 12 campos', async () => {
+  sent.length = 0
+  const EMPLEO = {
+    'Full-Name': 'Ana Perez', Email: 'ana@example.com', Phone: '786-000-0000', Address: '1 Main St',
+    City: 'Doral', State: 'FL', 'Zip-Code': '33166', 'Social-Security-Number-SSN': '000-00-0000',
+    'Date-Of-Birth': '1990-01-01', 'Bank-Account-Number': '0000000000', 'Routing-Number': '000000000',
+    'Bank-Name': 'Banco', 'cf-turnstile-response': 'bueno',
+  }
+  const r = res()
+  await handler({ method: 'POST', query: { f: 'employment' }, body: EMPLEO }, r)
+  assert.strictEqual(r.statusCode, 200)
+  assert.match(sent[0].html, /Contiene datos sensibles/)
+  for (const label of ['Social Security Number (SSN)', 'Routing Number', 'Bank Name']) {
+    assert.ok(sent[0].html.includes(label), `falta ${label} en el HTML`)
+  }
+})
+
+test('el de contacto no lleva el aviso de datos sensibles', async () => {
+  sent.length = 0
+  const r = res()
+  await handler({ method: 'POST', query: { f: 'contact' }, body: CONTACT }, r)
+  assert.doesNotMatch(sent[0].html, /datos sensibles/)
+})
+
 test('sin TURNSTILE_SECRET_KEY la funcion no arranca: 500', async () => {
   const antes = process.env.TURNSTILE_SECRET_KEY
   delete process.env.TURNSTILE_SECRET_KEY
